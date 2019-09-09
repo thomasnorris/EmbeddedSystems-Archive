@@ -79,3 +79,5 @@
 # !my_customized_scatter_file.sct
 *.uvgui_*
 !*texas.o
+*_uvopt.*
+*_uvproj.*
