@@ -67,20 +67,20 @@ int main(void){
 	// The grader uses interrupts
   EnableInterrupts();
   while(1){
-    SW1 = GPIO_PORTF_DATA_R&0x10;        // read PF4 into SW1
-    SW2 = GPIO_PORTF_DATA_R&0x01;        // read PF0 into SW2
-    
+		SW1 = GPIO_PORTF_DATA_R&0x10;        // read PF4 into SW1
+		SW2 = GPIO_PORTF_DATA_R&0x01;        // read PF0 into SW2
+		
 		if (!SW1 && !SW2)                    // both are pressed (active high; 1 = not pressed, 0 = pressed)
-      GPIO_PORTF_DATA_R = LED_BLUE;      // LED is blue
-			
+			GPIO_PORTF_DATA_R = LED_BLUE;      // LED is blue
+		
 		else if (!SW1 && SW2)			 					 // only SW1 is pressed
 			GPIO_PORTF_DATA_R = LED_RED;			 // LED is red
-     
+		
 		else if(SW1 && !SW2)                 // only SW2 is pressed
-        GPIO_PORTF_DATA_R = LED_GREEN;   // LED is green
-    
+			GPIO_PORTF_DATA_R = LED_GREEN;     // LED is green
+		
 		else                                 // neither are pressed
-				GPIO_PORTF_DATA_R = LED_OFF;		 // LED is off
+			GPIO_PORTF_DATA_R = LED_OFF;		   // LED is off
   }
 }
 
