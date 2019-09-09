@@ -1,0 +1,9 @@
+.\lab10.o: Lab10.c
+.\lab10.o: C:\Keil\ARM\ARMCC\bin\..\include\stdint.h
+.\lab10.o: C:\Keil\ARM\ARMCC\bin\..\include\stdio.h
+.\lab10.o: ST7735.h
+.\lab10.o: TExaS.h
+.\lab10.o: ADC.h
+.\lab10.o: print.h
+.\lab10.o: PLL.h
+.\lab10.o: ../inc/tm4c123gh6pm.h

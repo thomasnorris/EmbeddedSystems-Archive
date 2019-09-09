@@ -1,0 +1,22 @@
+Dependencies for Project 'Lab8', Target 'Lab8': (DO NOT MODIFY !)
+F (.\startup.s)(0x53098060)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\Lab8.c)(0x595261A3)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\lab8.o --omf_browse .\lab8.crf --depend .\lab8.d)
+I (../inc/tm4c123gh6pm.h)(0x53E63EFA)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C86E14)
+I (Sound.h)(0x54A15D3E)
+I (Piano.h)(0x54A15D3E)
+I (TExaS.h)(0x569BA38E)
+F (.\Sound.c)(0x582F2B1C)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\sound.o --omf_browse .\sound.crf --depend .\sound.d)
+I (Sound.h)(0x54A15D3E)
+I (DAC.h)(0x5321A24E)
+I (..//inc//tm4c123gh6pm.h)(0x53E63EFA)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C86E14)
+F (.\DAC.c)(0x582F2A9D)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\dac.o --omf_browse .\dac.crf --depend .\dac.d)
+I (DAC.h)(0x5321A24E)
+I (..//inc//tm4c123gh6pm.h)(0x53E63EFA)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C86E14)
+F (.\Piano.c)(0x582F2A4E)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\..-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\TI\TM4C123-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\piano.o --omf_browse .\piano.crf --depend .\piano.d)
+I (Piano.h)(0x54A15D3E)
+I (..//inc//tm4c123gh6pm.h)(0x53E63EFA)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C86E14)
+F (.\texas.o)(0x569BA2AA)()
