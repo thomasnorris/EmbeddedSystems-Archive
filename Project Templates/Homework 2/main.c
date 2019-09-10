@@ -17,12 +17,17 @@ void toggleBitValue(void);
 
 int main(void) {
 	while(1) {
-		
+		checkBitValue();
+		//setBitValue();
+		//clearBitValue();
+		//toggleBitValue();
 	}
 }
 
 void checkBitValue(void) {
-
+	char ch1 = 0x34;      // 2_00110100
+	char mask = 0x20;     // 2_00100000
+	char ch2;
 }
 
 void setBitValue(void) {
@@ -33,6 +38,6 @@ void clearBitValue(void) {
 
 }
 
-void toggleBigValue(void) {
+void toggleBitValue(void) {
 
 }
