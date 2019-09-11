@@ -13,8 +13,16 @@
 int main(void) {
 	int maxValueArray[10] = {-1, 5, 3, 8, -10, 23, 6, 5, 2, 10};
 	int arraySize = 10;
+	int maxValue = 0;
 	
-	// do the rest
+	int i;
+	for (i = 0; i < arraySize; ++i) {
+		int currentValue = maxValueArray[i];
+		if (currentValue >= maxValue)
+			maxValue = currentValue;
+	}
+	
+	// do something with maxValue
 	
 	while(1) {
 		// do nothing
