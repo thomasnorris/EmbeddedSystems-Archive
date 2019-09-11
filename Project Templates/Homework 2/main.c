@@ -11,13 +11,10 @@
 // Called by startup assembly code, start of C code
 
 int main(void) {
-	int startVal = 5;
-	int factorial = 1;
+	int maxValueArray[10] = {-1, 5, 3, 8, -10, 23, 6, 5, 2, 10};
+	int arraySize = 10;
 	
-	for (startVal = startVal; startVal > 0; --startVal)
-		factorial *= startVal;
-	
-	// do somthing with factorial
+	// do the rest
 	
 	while(1) {
 		// do nothing
