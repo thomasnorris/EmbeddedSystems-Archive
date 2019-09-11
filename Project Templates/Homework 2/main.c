@@ -30,14 +30,17 @@ void checkBitValue(void) {
 	char mask = 0x20;     // 0x20 = 2_00100000
 	char ch2;
 	
-	if (ch1 & mask)       // ch1 & mask yeilds 2_00100000 (showing that bit 5 is 1)
+	if (ch1 & mask)       // (ch1 & mask) yeilds 2_00100000
 		ch2 = 1;
 	else
 		ch2 = 0;
 }
 
 void setBitValue(void) {
-
+	char ch1 = 0x34;      // 0x34 = 2_00110100
+	char mask = 0x01;     // 0x01 = 2_00000001
+	
+	ch1 |= mask;          // (ch1 |= mask) will set ch1 to 2_00110101
 }
 
 void clearBitValue(void) {
