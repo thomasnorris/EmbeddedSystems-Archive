@@ -44,7 +44,10 @@ void setBitValue(void) {
 }
 
 void clearBitValue(void) {
-
+	char ch1 = 0x34;      // 0x34 = 2_00110100
+	char mask = 0x34;     // 0x34 = 2_00110100
+	
+	ch1 &= mask;          // sets ch1 to 2_00110100
 }
 
 void toggleBitValue(void) {
