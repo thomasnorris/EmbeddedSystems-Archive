@@ -19,9 +19,9 @@ int main(void) {
 
 	while(1) {
 		checkBitValue();
-		//setBitValue();
-		//clearBitValue();
-		//toggleBitValue();
+		setBitValue();
+		clearBitValue();
+		toggleBitValue();
 	}
 }
 
@@ -30,7 +30,7 @@ void checkBitValue(void) {
 	char mask = 0x20;     // 0x20 = 2_00100000
 	char ch2;
 	
-	if (ch1 & 0x04)       // 0x04 = 2_00000100
+	if (ch1 & mask)       // ch1 & mask yeilds 2_00100000 (showing that bit 5 is 1)
 		ch2 = 1;
 	else
 		ch2 = 0;
