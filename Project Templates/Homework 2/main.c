@@ -16,6 +16,7 @@ void clearBitValue(void);
 void toggleBitValue(void);
 
 int main(void) {
+
 	while(1) {
 		checkBitValue();
 		//setBitValue();
@@ -25,9 +26,14 @@ int main(void) {
 }
 
 void checkBitValue(void) {
-	char ch1 = 0x34;      // 2_00110100
-	char mask = 0x20;     // 2_00100000
+	char ch1 = 0x34;      // 0x34 = 2_00110100
+	char mask = 0x20;     // 0x20 = 2_00100000
 	char ch2;
+	
+	if (ch1 & 0x04)       // 0x04 = 2_00000100
+		ch2 = 1;
+	else
+		ch2 = 0;
 }
 
 void setBitValue(void) {
