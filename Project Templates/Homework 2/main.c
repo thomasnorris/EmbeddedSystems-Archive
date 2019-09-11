@@ -11,13 +11,11 @@
 // Called by startup assembly code, start of C code
 
 int main(void) {
-	int start_val = 5;
+	int startVal = 5;
 	int factorial = 1;
 	
-	while (start_val) {
-		factorial *= start_val;
-		--start_val;
-	}
+	for (startVal = startVal; startVal > 0; --startVal)
+		factorial *= startVal;
 	
 	// do somthing with factorial
 	
