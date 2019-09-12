@@ -24,10 +24,13 @@ int _monthlyPaymentHistoryAlice[24] = {1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,1,1,1,1
 int main(void) {
 	int index = 0;
 	int arraySize = sizeof(_monthlyPaymentHistoryAlice) / sizeof(int);
+	
 	while (1) {
 		if (index == arraySize)                                      // reset the index back to zero to restart the cycle
 			index = 0;
+		
 		_creditStatus = rewardsOrAlarm(index);
+		
 		index++;
 	}
 }
@@ -41,18 +44,18 @@ void updateCreditRatingAlice(int opCode) {
 
 int rewardsOrAlarm(int index) {
 	int currentOpCode = _monthlyPaymentHistoryAlice[index];
-	int previousCreditRating = _creditRatingAlice;
+	int previousCreditRating = _creditRatingAlice;                   // previous credit rating is the same as her credit rating before updating
 	int newCreditRating;
 	
 	updateCreditRatingAlice(currentOpCode);
-	newCreditRating = _creditRatingAlice;
+	newCreditRating = _creditRatingAlice;                            // now, _creditRatingAlice has been updated to the new rating
 	
-	if (newCreditRating == previousCreditRating) {
-		if (newCreditRating == _maxCreditRating)                     // if the previous month's credit rating didn't change and it's max, return 1
+	if (newCreditRating == previousCreditRating) {                   // if the credit didn't change from the previous month
+		if (newCreditRating == _maxCreditRating)                     // if the credit rating is at maximum, return 1 (reward)
 			return 1;
-		else if (newCreditRating == _minCreditRating)                // if the previous month's credit rating didn't change and it's minimum, return 0
+		else if (newCreditRating == _minCreditRating)                // if the credit rating is at minimum, return 0 (alarm)
 			return 0;
 	}
 	
-	return 2;
+	return 2;                                                        // needed a status for the case where she doesn't receive an alarm or a reward
 }
