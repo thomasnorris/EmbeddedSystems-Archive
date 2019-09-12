@@ -18,7 +18,7 @@ unsigned long sum(unsigned long n) {
 	unsigned long partial = 0;
 	
 	int i;
-	for (i = 0; i <= n; ++i)
+	for (i = 0; i <= n; ++i)            // sum the numbers from 0 up to n (inclusive)
 		partial += i;
 	
 	return partial;
