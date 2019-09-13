@@ -25,30 +25,30 @@ int main(void) {
 	int index = 0;
 	int arraySize = sizeof(_monthlyPaymentHistoryAlice) / sizeof(int);
 	
-	while (1) {
-		if (index == arraySize)                                      // reset the index back to zero to restart the cycle
-			index = 0;
+	while (1) {                                                      // while true
+		if (index == arraySize)                                      // if index is the size of the array
+			index = 0;                                               // reset the index back to zero to restart the cycle
 		
-		_creditStatus = rewardsOrAlarm(index);
+		_creditStatus = rewardsOrAlarm(index);                       // update the credit status
 		
-		index++;
+		index++;                                                     // increment the index
 	}
 }
 
 void updateCreditRatingAlice(int opCode) {
-	if (opCode == 1 && _creditRatingAlice != _maxCreditRating)       // only add 10 to the credit rating if it isn't already max
+	if (opCode == 1 && _creditRatingAlice != _maxCreditRating)       // only add 10 to the credit rating if it isn't already max and the opCode is 1
 		_creditRatingAlice += 10;
-	else if (_creditRatingAlice != _minCreditRating)                 // only subtract 10 from the credit rating if it isn't already min
+	else if (_creditRatingAlice != _minCreditRating)                 // only subtract 10 from the credit rating if it isn't already min and the opCOde is not 1
 		_creditRatingAlice -= 10;
 }
 
 int rewardsOrAlarm(int index) {
-	int currentOpCode = _monthlyPaymentHistoryAlice[index];
-	int previousCreditRating = _creditRatingAlice;                   // previous credit rating is the same as her credit rating before updating
+	int currentOpCode = _monthlyPaymentHistoryAlice[index];          // get the current opCode for this month
+	int previousCreditRating = _creditRatingAlice;                   // previous credit rating is the same as the credit rating before updating
 	int newCreditRating;
 	
-	updateCreditRatingAlice(currentOpCode);
-	newCreditRating = _creditRatingAlice;                            // now, _creditRatingAlice has been updated to the new rating
+	updateCreditRatingAlice(currentOpCode);                          // update credit rating using the current opCode
+	newCreditRating = _creditRatingAlice;                            // the credit rating has been updated
 	
 	if (newCreditRating == previousCreditRating) {                   // if the credit didn't change from the previous month
 		if (newCreditRating == _maxCreditRating)                     // if the credit rating is at maximum, return 1 (reward)
@@ -57,5 +57,5 @@ int rewardsOrAlarm(int index) {
 			return 0;
 	}
 	
-	return 2;                                                        // needed a status for the case where she doesn't receive an alarm or a reward
+	return 2;                                                        // status 2 is the case where she doesn't receive an alarm or a reward
 }
