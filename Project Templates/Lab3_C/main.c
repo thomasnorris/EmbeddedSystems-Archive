@@ -19,16 +19,27 @@
 void PortE_Init(void);
 
 int main(void){ 
-	unsigned long PE3;
-	unsigned long PE4;
-	unsigned long PE5;
-	unsigned long PE2;
+	// inputs
+	unsigned long PE3 = 0x08;
+	unsigned long PE4 = 0x10;
+	unsigned long PE5 = 0x20;
 	
-	// Init Port E
+	// output
+	unsigned long PE2 = 0x04;
+	
+	// init port E
 	PortE_Init();
 	
 	while(1){
 		// check input switches to set the output LED
+		unsigned long SW1 = GPIO_PORTE_DATA_R & PE3; 
+		unsigned long SW2 = GPIO_PORTE_DATA_R & PE4;
+		unsigned long SW3 = GPIO_PORTE_DATA_R & PE5;
+		
+		if (!SW1 && !SW2 && !SW3)
+			GPIO_PORTE_DATA_R |= PE2;    // turn only pin 2 on
+		else
+			GPIO_PORTE_DATA_R &= ~PE2;   // turn only pin 2 off
 	}
 }
 
