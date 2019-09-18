@@ -20,33 +20,34 @@ void PortE_Init(void);
 
 int main(void){ 
 	// inputs
-	unsigned long PE3 = 0x08;
-	unsigned long PE4 = 0x10;
-	unsigned long PE5 = 0x20;
+	unsigned long PE3 = 0x08;            // 2_00001000
+	unsigned long PE4 = 0x10;            // 2_00010000
+	unsigned long PE5 = 0x20;            // 2_00100000
 	
 	// output
-	unsigned long PE2 = 0x04;
+	unsigned long PE2 = 0x04;            // 2_00000100
 	
 	// init port E
 	PortE_Init();
 	
-	while(1){
+	// forever loop
+	while(1) {
 		// check input switches to set the output LED
 		unsigned long SW1 = GPIO_PORTE_DATA_R & PE3; 
 		unsigned long SW2 = GPIO_PORTE_DATA_R & PE4;
 		unsigned long SW3 = GPIO_PORTE_DATA_R & PE5;
 		
-		if (!SW1 && !SW2 && !SW3)
-			GPIO_PORTE_DATA_R |= PE2;    // turn only pin 2 on
+		if (!SW1 && !SW2 && !SW3)        // pull-up resistors used, negative logic
+			GPIO_PORTE_DATA_R |= PE2;    // turn only pin 2 on by bitwise or with 2_00000100
 		else
-			GPIO_PORTE_DATA_R &= ~PE2;   // turn only pin 2 off
+			GPIO_PORTE_DATA_R &= ~PE2;   // turn only pin 2 off by bitwise and with 2_11111011
 	}
 }
 
 void PortE_Init(void) {
 	SYSCTL_RCGCGPIO_R |= 0x10;
 	while (!(SYSCTL_PRGPIO_R & 0x10)) {
-		// wait for the clock to be active, do nothing
+		// wait for the clock to be active, do nothing in the mean time
 	}
 	
 	GPIO_PORTE_LOCK_R = GPIO_LOCK_KEY;
