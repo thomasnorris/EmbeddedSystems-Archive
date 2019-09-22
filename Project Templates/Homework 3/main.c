@@ -76,7 +76,7 @@ void initPortC(void) {
 	GPIO_PORTC_LOCK_R = GPIO_LOCK_KEY;
 	GPIO_PORTC_PCTL_R = 0x00;
 	GPIO_PORTC_DATA_R = pinHex;              // set pin 6 as output
-	GPIO_PORTC_DEN_R = pinHex;               // enable pin 6
+	// GPIO_PORTC_DEN_R = pinHex;            // do not enable pin 6 (yet)
 }
 
 // port D pin 4 OUTPUT
@@ -93,17 +93,3 @@ void initPortD(void) {
 	GPIO_PORTD_DATA_R = pinHex;              // set pin 4 as output
 	GPIO_PORTD_DEN_R = pinHex;               // enable pin 4
 }
-
-// void PortE_Init(void) {
-// 	SYSCTL_RCGCGPIO_R |= 0x10;
-// 	while (!(SYSCTL_PRGPIO_R & 0x10)) {
-// 	}
-
-// 	GPIO_PORTE_LOCK_R = GPIO_LOCK_KEY;
-// 	GPIO_PORTE_PCTL_R = 0x00;
-
-// 	// settings from lab 3
-// 	GPIO_PORTE_DIR_R = 0x04;
-// 	GPIO_PORTE_PUR_R = 0x38;
-// 	GPIO_PORTE_DEN_R = 0x3C;
-// }
