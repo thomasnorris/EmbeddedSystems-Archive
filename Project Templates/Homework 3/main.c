@@ -29,8 +29,13 @@ int main(void){
 	}
 }
 
+// DIR: 0 = INPUT
+//      1 = OUTPUT
+
+// port A pin 7 INPUT
 void initPortA(void) {
-	unsigned long portHex = 0x00;
+	unsigned long portHex = 0x01;
+	unsigned long pinHex = 0x80;
 	
 	SYSCTL_RCGCGPIO_R |= portHex;
 	while (!(SYSCTL_PRGPIO_R & portHex)) {
@@ -40,8 +45,10 @@ void initPortA(void) {
 	GPIO_PORTA_PCTL_R = 0x00;
 }
 
+// port B pin 0 INPUT
 void initPortB(void) {
-	unsigned long portHex = 0x00;
+	unsigned long portHex = 0x02;
+	unsigned long pinHex = 0x01;
 	
 	SYSCTL_RCGCGPIO_R |= portHex;
 	while (!(SYSCTL_PRGPIO_R & portHex)) {
@@ -51,8 +58,10 @@ void initPortB(void) {
 	GPIO_PORTB_PCTL_R = 0x00;
 }
 
+// port C pin 6 OUTPUT
 void initPortC(void) {
-	unsigned long portHex = 0x00;
+	unsigned long portHex = 0x04;
+	unsigned long pinHex = 0x40;
 	
 	SYSCTL_RCGCGPIO_R |= portHex;
 	while (!(SYSCTL_PRGPIO_R & portHex)) {
@@ -62,8 +71,10 @@ void initPortC(void) {
 	GPIO_PORTC_PCTL_R = 0x00;
 }
 
+// port D pin 4 OUTPUT
 void initPortD(void) {
-	unsigned long portHex = 0x00;
+	unsigned long portHex = 0x08;
+	unsigned long pinHex = 0x10;
 	
 	SYSCTL_RCGCGPIO_R |= portHex;
 	while (!(SYSCTL_PRGPIO_R & portHex)) {
