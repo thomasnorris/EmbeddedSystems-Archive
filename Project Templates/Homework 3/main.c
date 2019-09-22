@@ -7,17 +7,12 @@
 #include <stdint.h>
 #include "inc/tm4c123gh6pm.h"
 
-//void PortE_Init(void);
 void initPortA(void);
 void initPortB(void);
 void initPortC(void);
 void initPortD(void);
 
 int main(void){
-
-	// init port E
-	// PortE_Init();
-
 	initPortA();
 	initPortB();
 	initPortC();
