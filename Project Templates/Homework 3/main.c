@@ -79,7 +79,7 @@ void initPortC(void) {
 	GPIO_PORTC_DIR_R = pinHex;               // set pin 6 as output
 	GPIO_PORTC_DEN_R = pinHex;               // enable pin 6
 	
-	GPIO_PORTC_DATA_R |= 0x01;               // write a 1 to pin 6
+	GPIO_PORTC_DATA_R |= pinHex;             // write a 1 to pin 6
 }
 
 // port D pin 4 OUTPUT
@@ -96,5 +96,5 @@ void initPortD(void) {
 	GPIO_PORTD_DIR_R = pinHex;               // set pin 4 as output
 	GPIO_PORTD_DEN_R = pinHex;               // enable pin 4
 	
-	GPIO_PORTD_DATA_R |= 0x01;               // write a 1 to pin 4
+	GPIO_PORTD_DATA_R |= pinHex;             // write a 1 to pin 4
 }
