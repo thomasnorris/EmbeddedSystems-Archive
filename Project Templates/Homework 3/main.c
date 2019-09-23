@@ -31,9 +31,6 @@ int main(void){
 	}
 }
 
-// DIR: 0 = INPUT
-//      1 = OUTPUT
-
 // port A pin 7 INPUT
 unsigned long initPortA(void) {
 	unsigned long portHex = 0x01;            // hex value for port A
@@ -105,6 +102,7 @@ void initPortD(void) {
 	GPIO_PORTD_DATA_R |= pinHex;             // write a 1 to pin 4
 }
 
+// port A pins 3, 4, 5 OUTPUT
 void question5(unsigned long threeBitValue) {
 	unsigned long pin345Hex = 0x38;          // 2_00111000
 	
