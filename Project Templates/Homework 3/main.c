@@ -11,6 +11,7 @@ unsigned long initPortA(void);
 unsigned long initPortB(void);
 void initPortC(void);
 void initPortD(void);
+void question5(unsigned long);
 
 int main(void){
 	
@@ -19,7 +20,11 @@ int main(void){
 	initPortB();                            // do not use the return value
 	initPortC();
 	initPortD();
-
+	
+	unsigned long threeBitValue = 0x02;     // can be any value from 0 to 0x07 (three bits)
+	if (threeBitValue <= 0x07)              // check to make sure it is valid
+		question5(threeBitValue);           // call the function with the supplied value
+	
 	// forever loop
 	while(1) {
 
@@ -84,6 +89,7 @@ void initPortC(void) {
 
 // port D pin 4 OUTPUT
 void initPortD(void) {
+	
 	unsigned long portHex = 0x08;            // hex value for port D
 	unsigned long pinHex = 0x10;             // hex value for pin 4
 
@@ -97,4 +103,17 @@ void initPortD(void) {
 	GPIO_PORTD_DEN_R = pinHex;               // enable pin 4
 	
 	GPIO_PORTD_DATA_R |= pinHex;             // write a 1 to pin 4
+}
+
+void question5(unsigned long threeBitValue) {
+	unsigned long pin345Hex = 0x38;          // 2_00111000
+	
+	if (!(SYSCTL_PRGPIO_R & 0x01))           // port A should be initialized, but if there is no clock that is not the case, so initPortA()
+		initPortA();
+	
+	threeBitValue <<= 3;                     // bit shift to the left by 3 to represent pins 3, 4, 5 instead of 0, 1, 2
+	
+	GPIO_PORTA_DIR_R |= pin345Hex;           // set ONLY pins 3, 4, 5 to output (pin 7 and all others are still input from initPortA())
+	GPIO_PORTA_DEN_R |= pin345Hex;           // enable ONLY pins 3, 4, 5 (pin 7 is enabled from initPortA())
+	GPIO_PORTA_DATA_R |= threeBitValue;      // set ONLY pins 3, 4, 5 to threeBitValue
 }
