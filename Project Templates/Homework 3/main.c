@@ -7,12 +7,14 @@
 #include <stdint.h>
 #include "inc/tm4c123gh6pm.h"
 
-void initPortA(void);
+unsigned long initPortA(void);
 void initPortB(void);
 void initPortC(void);
 void initPortD(void);
 
 int main(void){
+	
+	// init functions
 	initPortA();
 	initPortB();
 	initPortC();
@@ -28,7 +30,7 @@ int main(void){
 //      1 = OUTPUT
 
 // port A pin 7 INPUT
-void initPortA(void) {
+unsigned long initPortA(void) {
 	unsigned long portHex = 0x01;            // hex value for port A
 	unsigned long pinHex = 0x80;             // hex value for pin 7
 
@@ -38,9 +40,11 @@ void initPortA(void) {
 
 	GPIO_PORTA_LOCK_R = GPIO_LOCK_KEY;       // unlock port A
 	GPIO_PORTA_PCTL_R = 0x00;                // clear the PCTL register
-	GPIO_PORTA_DATA_R = 0x00;                // set pin 7 as input
+	GPIO_PORTA_DIR_R = 0x00;                // set pin 7 as input
 	GPIO_PORTA_PDR_R = pinHex;               // enable pull-down reisistor on pin 7 (positive logic)
 	GPIO_PORTA_DEN_R = pinHex;               // enable pin 7
+	
+	return GPIO_PORTA_DATA_R & pinHex;       // ??
 }
 
 // port B pin 0 INPUT
@@ -54,7 +58,7 @@ void initPortB(void) {
 
 	GPIO_PORTB_LOCK_R = GPIO_LOCK_KEY;       // unlock port B
 	GPIO_PORTB_PCTL_R = 0x00;                // clear the PCTL register
-	GPIO_PORTB_DATA_R = 0x00;                // set pin 0 as input
+	GPIO_PORTB_DIR_R = 0x00;                // set pin 0 as input
 	GPIO_PORTB_PUR_R = pinHex;               // enable pull-up reisistor on pin 0 (negative logic)
 	GPIO_PORTB_DEN_R = pinHex;               // enable pin 0
 }
@@ -70,7 +74,7 @@ void initPortC(void) {
 
 	GPIO_PORTC_LOCK_R = GPIO_LOCK_KEY;       // unlock port C
 	GPIO_PORTC_PCTL_R = 0x00;                // clear the PCTL register
-	GPIO_PORTC_DATA_R = pinHex;              // set pin 6 as output
+	GPIO_PORTC_DIR_R = pinHex;              // set pin 6 as output
 	// GPIO_PORTC_DEN_R = pinHex;            // do not enable pin 6 (yet)
 }
 
@@ -85,6 +89,6 @@ void initPortD(void) {
 
 	GPIO_PORTD_LOCK_R = GPIO_LOCK_KEY;       // unlock port D
 	GPIO_PORTD_PCTL_R = 0x00;                // clear the PCTL register
-	GPIO_PORTD_DATA_R = pinHex;              // set pin 4 as output
+	GPIO_PORTD_DIR_R = pinHex;              // set pin 4 as output
 	GPIO_PORTD_DEN_R = pinHex;               // enable pin 4
 }
