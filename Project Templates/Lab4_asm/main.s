@@ -63,17 +63,32 @@ Start
 	LDR r0, =0x00
 	STR r0, [r1]
 	
+	; fall through to loop
+	
 loop
 	; delay ~100ms
 	; TODO: Subroutine
 	
-	; see if PF4 is registering an input
+	; read the value of PF4
 	LDR r1, =GPIO_PORTF_DATA_R
 	LDR r0, [r1]
-	AND r0, r0, #0x10
+	AND r2, r0, #0x10
 	
-	B    loop
+	; if PF3 is 0 (switch is pressed), toggle the LED
+	CMP r2, #0x00
+	BEQ toggleLed
+	
+	; else PF3 is 1 (switch is not pressed), turn off the LED
+	LDR r0, =0x00
+	STR r0, [r1]
+	
+	B loop
+	
+toggleLed
+	EOR r0, r0, #0x08
+	STR r0, [r1]
 
+	B loop
 
 	ALIGN      ; make sure the end of this section is aligned
 	END        ; end of file
