@@ -64,9 +64,12 @@ Start
 	STR r0, [r1]
 	
 	; fall through to main
-	
+
 main
-	; delay by ~100ms
+	; delay by ~100ms by using nested loops
+	MOV r0, #10
+	MOV r1, #40000
+	
 	B delay
 
 afterDelay
@@ -77,7 +80,7 @@ afterDelay
 	
 	; if PF3 is 0 (switch is pressed), toggle the LED
 	CMP r2, #0x00
-	BEQ toggle
+	BEQ toggleLed
 	
 	; else PF3 is 1 (switch is not pressed), turn off the LED
 	MOV r0, #0x00
@@ -86,7 +89,7 @@ afterDelay
 	; loop forever
 	B main
 
-toggle
+toggleLed
 	; flip PF4 and write to the register
 	EOR r0, r0, #0x08
 	STR r0, [r1]
@@ -94,23 +97,19 @@ toggle
 	B main
 
 delay
-	MOV r0, #10
-	
-outerLoop
-	MOV r1, #40000
+	MOV r2, r1
 	SUBS r0, r0, #0x01
 	CMP r0, #0x00
 	BNE innerLoop
 	
 	B afterDelay
-	
+
 innerLoop
-	SUBS r1, r1, #0x01
-	CMP r1, #0x00;
+	SUBS r2, r2, #0x01
+	CMP r2, #0x00;
 	BNE innerLoop
 	
-	B outerLoop
-	
+	B delay
+
 	ALIGN      ; make sure the end of this section is aligned
 	END        ; end of file
-       
