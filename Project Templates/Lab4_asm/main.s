@@ -63,9 +63,9 @@ Start
 	MOV r0, #0x00
 	STR r0, [r1]
 	
-	; fall through to loop
+	; fall through to main
 	
-loop
+main
 	; delay ~100ms
 	; TODO: Subroutine
 	
@@ -76,22 +76,19 @@ loop
 	
 	; if PF3 is 0 (switch is pressed), toggle the LED
 	CMP r2, #0x00
-	BEQ toggleLed
+	BEQ toggle
 	
 	; else PF3 is 1 (switch is not pressed), turn off the LED
 	MOV r0, #0x00
 	STR r0, [r1]
 	
-	B loop
+	B main
 	
-toggleLed
+toggle
 	EOR r0, r0, #0x08
 	STR r0, [r1]
 
-	B loop
-
-delay
-	
+	B main
 
 	ALIGN      ; make sure the end of this section is aligned
 	END        ; end of file
