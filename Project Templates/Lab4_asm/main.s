@@ -1,10 +1,10 @@
 ;*******************************************************************
 ; main.s
-; Author: ***update this***
-; Date Created: 11/18/2016
-; Last Modified: 11/18/2016
-; Section Number: ***update this***
-; Instructor: ***update this***
+; Author: Thomas Norris
+; Date Created: 9/25/19
+; Last Modified: 9/25/19
+; Section Number: 003
+; Instructor: Gursel Serpen
 ; Lab number: 4
 ;   Brief description of the program
 ; The overall objective of this system is an interactive alarm
