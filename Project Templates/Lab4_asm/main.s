@@ -66,9 +66,10 @@ Start
 	; fall through to main
 	
 main
-	; delay ~100ms
-	; TODO: Subroutine
-	
+	; delay by ~100ms
+	B delay
+
+afterDelay
 	; read the value of PF4
 	LDR r1, =GPIO_PORTF_DATA_R
 	LDR r0, [r1]
@@ -83,7 +84,13 @@ main
 	STR r0, [r1]
 	
 	B main
-	
+
+delay
+	MOV r0, #60000
+	MOV r1, #100
+	; nested loops?
+	B afterDelay
+
 toggle
 	EOR r0, r0, #0x08
 	STR r0, [r1]
