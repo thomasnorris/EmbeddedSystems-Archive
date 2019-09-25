@@ -55,7 +55,7 @@ Start
 	
 	; set PUR for PF4
 	LDR r1, =GPIO_PORTF_PUR_R
-	LDR r0, =0x08
+	LDR r0, =0x10
 	STR r0, [r1]
 	
 	; set PF3 to off
@@ -64,7 +64,14 @@ Start
 	STR r0, [r1]
 	
 loop
-	; see if PF3 is registering an input
+	; delay ~100ms
+	; TODO: Subroutine
+	
+	; see if PF4 is registering an input
+	LDR r1, =GPIO_PORTF_DATA_R
+	LDR r0, [r1]
+	AND r0, r0, #0x10
+	
 	B    loop
 
 
