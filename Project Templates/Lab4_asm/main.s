@@ -83,20 +83,34 @@ afterDelay
 	MOV r0, #0x00
 	STR r0, [r1]
 	
+	; loop forever
 	B main
 
-delay
-	MOV r0, #60000
-	MOV r1, #100
-	; nested loops?
-	B afterDelay
-
 toggle
+	; flip PF4 and write to the register
 	EOR r0, r0, #0x08
 	STR r0, [r1]
 
 	B main
 
+delay
+	MOV r0, #10
+	
+outerLoop
+	MOV r1, #40000
+	SUBS r0, r0, #0x01
+	CMP r0, #0x00
+	BNE innerLoop
+	
+	B afterDelay
+	
+innerLoop
+	SUBS r1, r1, #0x01
+	CMP r1, #0x00;
+	BNE innerLoop
+	
+	B outerLoop
+	
 	ALIGN      ; make sure the end of this section is aligned
 	END        ; end of file
        
