@@ -31,16 +31,42 @@ SYSCTL_RCGCGPIO_R       EQU   0x400FE608
 GPIO_PORTF_LOCK_R  	    EQU   0x40025520
 GPIO_PORTF_CR_R         EQU   0x40025524
 
-       AREA    |.text|, CODE, READONLY, ALIGN=2
-       THUMB
-       EXPORT  Start
+	AREA    |.text|, CODE, READONLY, ALIGN=2
+	THUMB
+	EXPORT  Start
 Start
+	; enable the clock for port F
+	LDR r1, =SYSCTL_RCGCGPIO_R
+	LDR r0, [r1]
+	ORR r0, r0, #0x20
+	STR r0, [r1]
+	
+	; set pins 3 as output (1), 4 as input (0)
+	LDR r1, =GPIO_PORTF_DIR_R
+	LDR r0, =0x08
+	STR r0, [r1]
+	
+	; enable bits 3 and 4
+	LDR r1, =GPIO_PORTF_DEN_R
+	LDR r0, =0x18
+	STR r0, [r1]
+	
+	; set PUR for pin 4
+	LDR r1, =GPIO_PORTF_PUR_R
+	LDR r0, =0x08
+	STR r0, [r1]
+	
+	; set pin 3 to off
+	LDR r1, =GPIO_PORTF_DATA_R
+	LDR r0, =0x00
+	STR r0, [r1]
+	
+	B loop
+loop
+	; main
+	B    loop
 
-loop  
 
-       B    loop
-
-
-       ALIGN      ; make sure the end of this section is aligned
-       END        ; end of file
+	ALIGN      ; make sure the end of this section is aligned
+	END        ; end of file
        
