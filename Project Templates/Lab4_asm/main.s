@@ -45,22 +45,22 @@ Start
 	
 	; set PF3 as output (1), PF4 as input (0)
 	LDR r1, =GPIO_PORTF_DIR_R
-	LDR r0, =0x08
+	MOV r0, #0x08
 	STR r0, [r1]
 	
 	; enable PF3 and PF4
 	LDR r1, =GPIO_PORTF_DEN_R
-	LDR r0, =0x18
+	MOV r0, #0x18
 	STR r0, [r1]
 	
 	; set PUR for PF4
 	LDR r1, =GPIO_PORTF_PUR_R
-	LDR r0, =0x10
+	MOV r0, #0x10
 	STR r0, [r1]
 	
 	; set PF3 to off
 	LDR r1, =GPIO_PORTF_DATA_R
-	LDR r0, =0x00
+	MOV r0, #0x00
 	STR r0, [r1]
 	
 	; fall through to loop
@@ -79,7 +79,7 @@ loop
 	BEQ toggleLed
 	
 	; else PF3 is 1 (switch is not pressed), turn off the LED
-	LDR r0, =0x00
+	MOV r0, #0x00
 	STR r0, [r1]
 	
 	B loop
@@ -89,6 +89,9 @@ toggleLed
 	STR r0, [r1]
 
 	B loop
+
+delay
+	
 
 	ALIGN      ; make sure the end of this section is aligned
 	END        ; end of file
