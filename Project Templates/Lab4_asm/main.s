@@ -66,10 +66,7 @@ Start
 	; fall through to main
 
 main
-	; delay by ~100ms by using nested loops
-	MOV r0, #10
-	MOV r1, #40000
-	
+	; delay by ~100ms
 	B delay
 
 afterDelay
@@ -97,6 +94,11 @@ toggleLed
 	B main
 
 delay
+	; outerLoop will be called r0 times, innerLoop will be called r1 times
+	MOV r0, #10
+	MOV r1, #40000
+
+outerLoop
 	MOV r2, r1
 	SUBS r0, r0, #0x01
 	CMP r0, #0x00
@@ -109,7 +111,7 @@ innerLoop
 	CMP r2, #0x00;
 	BNE innerLoop
 	
-	B delay
+	B outerLoop
 
 	ALIGN      ; make sure the end of this section is aligned
 	END        ; end of file
