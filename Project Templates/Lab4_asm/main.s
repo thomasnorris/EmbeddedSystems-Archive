@@ -42,6 +42,10 @@ Start
 	LDR r0, [r1]
 	ORR r0, r0, #0x20
 	STR r0, [r1]
+	
+	; allow time for the clock to activate
+	NOP
+	NOP
 
 	; set PF3 as output (1), PF4 as input (0)
 	LDR r1, =GPIO_PORTF_DIR_R
