@@ -67,9 +67,8 @@ Start
 
 main
 	; delay by ~100ms
-	B delay
-
-afterDelay
+	BL delay
+	
 	; read the value of PF4
 	LDR r1, =GPIO_PORTF_DATA_R
 	LDR r0, [r1]
@@ -107,7 +106,7 @@ outerLoop
 	CMP r0, #0x00
 	BNE innerLoop
 
-	B afterDelay
+	BX LR
 
 innerLoop
 	; subtract 1 from r2, if not 0, repeat innerLoop, otherwise go back to outerLoop
