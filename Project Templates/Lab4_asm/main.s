@@ -10,13 +10,13 @@
 ; The overall objective of this system is an interactive alarm
 ; Hardware connections
 ;   PF4 is switch input  (1 = switch not pressed, 0 = switch pressed)
-;   PF3 is LED output    (1 activates green LED) 
-; The specific operation of this system 
-;   1) Make PF3 an output and make PF4 an input (enable PUR for PF4). 
-;   2) The system starts with the LED OFF (make PF3 =0). 
+;   PF3 is LED output    (1 activates green LED)
+; The specific operation of this system
+;   1) Make PF3 an output and make PF4 an input (enable PUR for PF4).
+;   2) The system starts with the LED OFF (make PF3 =0).
 ;   3) Delay for about 100 ms
 ;   4) If the switch is pressed (PF4 is 0),
-;      then toggle the LED once, else turn the LED OFF. 
+;      then toggle the LED once, else turn the LED OFF.
 ;   5) Repeat steps 3 and 4 over and over
 ;*******************************************************************
 
@@ -42,27 +42,27 @@ Start
 	LDR r0, [r1]
 	ORR r0, r0, #0x20
 	STR r0, [r1]
-	
+
 	; set PF3 as output (1), PF4 as input (0)
 	LDR r1, =GPIO_PORTF_DIR_R
 	MOV r0, #0x08
 	STR r0, [r1]
-	
+
 	; enable PF3 and PF4
 	LDR r1, =GPIO_PORTF_DEN_R
 	MOV r0, #0x18
 	STR r0, [r1]
-	
+
 	; set PUR for PF4
 	LDR r1, =GPIO_PORTF_PUR_R
 	MOV r0, #0x10
 	STR r0, [r1]
-	
+
 	; set PF3 to off
 	LDR r1, =GPIO_PORTF_DATA_R
 	MOV r0, #0x00
 	STR r0, [r1]
-	
+
 	; fall through to main
 
 main
@@ -74,15 +74,15 @@ afterDelay
 	LDR r1, =GPIO_PORTF_DATA_R
 	LDR r0, [r1]
 	AND r2, r0, #0x10
-	
+
 	; if PF3 is 0 (switch is pressed), toggle the LED
 	CMP r2, #0x00
 	BEQ toggleLed
-	
+
 	; else PF3 is 1 (switch is not pressed), turn off the LED
 	MOV r0, #0x00
 	STR r0, [r1]
-	
+
 	; loop forever
 	B main
 
@@ -99,18 +99,22 @@ delay
 	MOV r1, #40000
 
 outerLoop
+	; move r1 into r2 so r1 is not overwritten
 	MOV r2, r1
+
+	; subtract 1 from r0, if not 0, go to innerLoop, otherwise the delay is done
 	SUBS r0, r0, #0x01
 	CMP r0, #0x00
 	BNE innerLoop
-	
+
 	B afterDelay
 
 innerLoop
+	; subtract 1 from r2, if not 0, repeat innerLoop, otherwise go back to outerLoop
 	SUBS r2, r2, #0x01
 	CMP r2, #0x00;
 	BNE innerLoop
-	
+
 	B outerLoop
 
 	ALIGN      ; make sure the end of this section is aligned
