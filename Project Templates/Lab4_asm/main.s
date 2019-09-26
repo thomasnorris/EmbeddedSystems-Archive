@@ -105,7 +105,8 @@ outerLoop
 	SUBS r0, r0, #0x01
 	CMP r0, #0x00
 	BNE innerLoop
-
+	
+	; exit the delay subroutine
 	BX LR
 
 innerLoop
@@ -115,6 +116,7 @@ innerLoop
 	BNE innerLoop
 
 	B outerLoop
-
+	
+	; end of program
 	ALIGN      ; make sure the end of this section is aligned
 	END        ; end of file
