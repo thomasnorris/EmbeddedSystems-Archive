@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Lab4</TargetName>
+      <TargetName>HW5</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
