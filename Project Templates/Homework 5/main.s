@@ -15,23 +15,22 @@
 	EXPORT  Start
 
 Start
-	; not tested using KEIL
 	; question 1
-	MOV r1, #0x12345678     ; 32 bit test value
-	MOV r0, r1, LSL #24     ; r0 = 0x78000000
+	MOV r1, #0x01010101     ; 32 bit test value
+	MOV r0, r1, LSL #24     ; r0 = 0x01000000
 
-	MOV r2, r1, LSR #8      ; r2 = 0x00123456
-	MOV r2, r2, LSL #24     ; r2 = 0x56000000
-	MOV r2, r2, LSR #8      ; r2 = 0x00560000
-	ORR r0, r0, r2          ; r0 = 0x78560000
+	MOV r2, r1, LSR #8      ; r2 = 0x00010101
+	MOV r2, r2, LSL #24     ; r2 = 0x01000000
+	MOV r2, r2, LSR #8      ; r2 = 0x00010000
+	ORR r0, r0, r2          ; r0 = 0x01010000
 
-	MOV r2, r1, LDR #16     ; r2 = 0x00001234
-	MOV r2, r2, LSL #24     ; r2 = 0x34000000
-	MOV r2, r2, LSR #16     ; r2 = 0x00003400
-	ORR r0, r0, r2          ; r0 = 0x78563400
+	MOV r2, r1, LSR #16     ; r2 = 0x00000101
+	MOV r2, r2, LSL #24     ; r2 = 0x01000000
+	MOV r2, r2, LSR #16     ; r2 = 0x00000100
+	ORR r0, r0, r2          ; r0 = 0x01010100
 
-	MOV r2, r1, LSR #24     ; r2 = 0x00000012
-	ORR r0, r0, r2          ; r0 = 0x78563412
+	MOV r2, r1, LSR #24     ; r2 = 0x00000001
+	ORR r0, r0, r2          ; r0 = 0x01010101
 
 loop
 	; forever
