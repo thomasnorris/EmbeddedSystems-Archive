@@ -39,13 +39,17 @@ chopAndShift
 	; r0, r1, r2, r3 are parameters
 	; r4 is a local variable
 	; returns in r0
+	
+	PUSH {r4}               ; push r4 onto the stack
 
 	MOV r4, r1, LSR r2      ; chop right r2 bits off r1, store in r4
 	MOV r4, r4, LSL r3      ; chop left r3 bits off r4, store in r4
 	MOV r4, r4, LSR r2      ; shift r4 right by r2 bits, store in r4
 
 	ORR r0, r0, r4          ; bitwise OR r4 byte with r0
-
+	
+	POP {r4}                ; pop r4 from the stack
+	
 	BX LR                   ; branch back to the link register
 
 loop
