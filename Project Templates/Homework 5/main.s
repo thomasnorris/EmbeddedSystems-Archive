@@ -16,21 +16,37 @@
 
 Start
 	; question 1
-	MOV r1, #0x01010101     ; 32 bit test value
-	MOV r0, r1, LSL #24     ; r0 = 0x01000000
+	; note: the test value can be any 8-digit hex value, not just what's here. I used
+	;       0x12345678 when writing the instructions but that value is too big to be executed
+	;       on the controller.
+	
+	MOV r1, #0x00110011     ; 32 bit test value
+	MOV r0, r1, LSL #24     ; r0 = 0x11000000
 
-	MOV r2, r1, LSR #8      ; r2 = 0x00010101
-	MOV r2, r2, LSL #24     ; r2 = 0x01000000
-	MOV r2, r2, LSR #8      ; r2 = 0x00010000
-	ORR r0, r0, r2          ; r0 = 0x01010000
+	MOV r2, #8
+	MOV r3, #24
+	BL chopAndShift         ; r0 = 0x11000000 after execution
 
-	MOV r2, r1, LSR #16     ; r2 = 0x00000101
-	MOV r2, r2, LSL #24     ; r2 = 0x01000000
-	MOV r2, r2, LSR #16     ; r2 = 0x00000100
-	ORR r0, r0, r2          ; r0 = 0x01010100
+	MOV r2, #16
+	MOV r3, #24
+	BL chopAndShift         ; r0 = 0x11001100 after execution
+	
+	MOV r3, r1, LSR #24     ; r3 = 0x00000000
+	ORR r0, r0, r3          ; r0 = 0x11001100
+	
+	B loop                  ; branch to forever loop
 
-	MOV r2, r1, LSR #24     ; r2 = 0x00000001
-	ORR r0, r0, r2          ; r0 = 0x01010101
+chopAndShift
+	; r0, r1, r2, r3 are parameters
+	; r4 is a local variable
+	; returns in r0
+	MOV r4, r1, LSR r2      ; chop right r2 bits off r1, store in r4
+	MOV r4, r4, LSL r3      ; chop left r3 bits off r4, store in r4
+	MOV r4, r4, LSR r2      ; shift r4 right by r2 bits, store in r4
+	
+	ORR r0, r0, r4          ; bitwise OR r4 byte with r0
+	
+	BX LR                   ; branch back to the link register
 
 loop
 	; forever
