@@ -10,8 +10,6 @@
 ;	Program for HW5	
 ;*******************************************************************
 
-
-
 	AREA    |.text|, CODE, READONLY, ALIGN=2
 	THUMB
 	EXPORT  Start
@@ -20,7 +18,7 @@ Start
 	; do stuff, fall to loop
 
 loop   
-	; do more stuff
+	; forever
 	B    loop
 
 
