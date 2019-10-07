@@ -15,7 +15,25 @@
 	EXPORT  Start
 
 Start
-	; do stuff, fall to loop
+	MOV r0, #0               ; r0 will be f(x)
+	MOV r1, #-78             ; r1 is the test value
+	
+	CMP r1, #0x00            ; compare r1 to #0x00, branch accordingly
+	BLT lessThanZero
+	BEQ equalToZero
+	BGT greaterThanZero
+	
+lessThanZero
+	MOV r0, #-1              ; f(x) = -1
+	B loop
+
+equalToZero
+	MOV r0, #0               ; f(x) = 0
+	B loop
+
+greaterThanZero
+	MOV r0, #1               ; f(x) = 1
+	B loop
 
 loop   
 	; forever
