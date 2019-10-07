@@ -26,6 +26,13 @@ forLoop
 	CMP r3, r1                      ; compare r1 with r3
 	BGT loop                        ; if r3 > r1 (i.e. the current index is greater than intArrLength - 1), we are done
 
+	PUSH {r4}                       ; we need r4, push it to the stack
+
+	; TODO: Code here
+
+	POP {r4}                        ; pop r4 from the stack
+
+	B forLoop
 
 loop
 	; forever
