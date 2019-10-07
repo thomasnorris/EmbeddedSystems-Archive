@@ -19,12 +19,10 @@ Start
 	MOV r1, #0                      ; r1 will hold the current index of the array, initialize to 0
 	LDR r2, =intArr                 ; load r2 with the base address of intArr
 	LDR r3, intArrLength            ; set r3 to intArrLength
-	
-	SUB r3, r3, #1                  ; subtract 1 from r3 so r3 = intArrLength - 1 
 
 forLoop
 	CMP r1, r3                      ; compare r1 with r3
-	BGT loop                        ; if r1 > r3 (i.e. the current index is greater than intArrLength - 1), exit forLoop
+	BEQ calcMean                    ; if r1 > r3 (i.e. the current index is greater than intArrLength - 1), exit forLoop
 
 	PUSH {r4}                       ; we need r4, push it to the stack
 
@@ -35,6 +33,9 @@ forLoop
 	POP {r4}                        ; pop r4 from the stack
 
 	B forLoop                       ; repeat forLoop
+
+calcMean
+	UDIV r0, r0, r3                 ; r0 = r0 / r3, tossing out the remainder
 
 loop
 	; forever
