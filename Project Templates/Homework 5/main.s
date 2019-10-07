@@ -7,7 +7,7 @@
 ; Instructor: Gursel Serpen
 ; Homework Number: 5
 ; Brief description of the program
-;	Program for HW5	
+;	Program for HW5
 ;*******************************************************************
 
 	AREA    |.text|, CODE, READONLY, ALIGN=2
@@ -15,13 +15,28 @@
 	EXPORT  Start
 
 Start
-	; do stuff, fall to loop
+	; untested
+	LDR r1, intArrLength
+	SUB r1, r1, intArrLength        ; r1 = intArrLength - 1
+	MOV r2, #0                      ; r2 will hold the sum of the array, initialize to 0
+	MOV r3, #0                      ; r3 will hold the current index of the array, initialize to 0
+	LDR r0, =intArr                 ; load r0 with the base address of intArr
 
-loop   
+forLoop
+	CMP r3, r1                      ; compare r1 with r3
+	BGT loop                        ; if r3 > r1 (i.e. the current index is greater than intArrLength - 1), we are done
+
+
+loop
 	; forever
 	B    loop
 
+	AREA	|.text|, DATA, READONLY, ALIGN=2
 
-       ALIGN      ; make sure the end of this section is aligned
-       END        ; end of file
-       
+intArr
+	DCD 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+intArrLength
+	DCD 10
+
+	ALIGN      ; make sure the end of this section is aligned
+	END        ; end of file
