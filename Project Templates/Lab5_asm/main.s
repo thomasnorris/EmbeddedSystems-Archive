@@ -41,35 +41,30 @@ SYSCTL_RCGCGPIO_R       EQU   0x400FE608
 	EXPORT  Start
 
 Start
-	; port F initialization
-	; enable the clock for port F
+	; port E initialization
+	; enable the clock for port E
 	LDR r1, =SYSCTL_RCGCGPIO_R
 	LDR r0, [r1]
-	ORR r0, r0, #0x20
+	ORR r0, r0, #0x10
 	STR r0, [r1]
 	
 	; allow time for the clock to activate
 	NOP
 	NOP
 
-	; set PF3 as output (1), PF4 as input (0)
-	LDR r1, =GPIO_PORTF_DIR_R
-	MOV r0, #0x08
+	; set PE0 as output (1), PE1 as input (0)
+	LDR r1, =GPIO_PORTE_DIR_R
+	MOV r0, #0x01
 	STR r0, [r1]
 
-	; enable PF3 and PF4
-	LDR r1, =GPIO_PORTF_DEN_R
-	MOV r0, #0x18
+	; enable PE0 and PE1
+	LDR r1, =GPIO_PORTE_DEN_R
+	MOV r0, #0x03
 	STR r0, [r1]
 
-	; set PUR for PF4
-	LDR r1, =GPIO_PORTF_PUR_R
-	MOV r0, #0x10
-	STR r0, [r1]
-
-	; set PF3 to off
-	LDR r1, =GPIO_PORTF_DATA_R
-	MOV r0, #0x00
+	; set PE0 to ON
+	LDR r1, =GPIO_PORTE_DATA_R
+	MOV r0, #0x01
 	STR r0, [r1]
 
 	; fall through to main
@@ -79,7 +74,7 @@ main
 	BL delay
 	
 	; read the value of PF4
-	LDR r1, =GPIO_PORTF_DATA_R
+	LDR r1, =GPIO_PORTE_DATA_R
 	LDR r0, [r1]
 	AND r2, r0, #0x10
 
