@@ -36,25 +36,97 @@ GPIO_PORTE_AMSEL_R      EQU   0x40024528
 GPIO_PORTE_PCTL_R       EQU   0x4002452C
 SYSCTL_RCGCGPIO_R       EQU   0x400FE608
 
-       IMPORT  TExaS_Init
+	AREA    |.text|, CODE, READONLY, ALIGN=2
+	THUMB
+	EXPORT  Start
 
-       AREA    |.text|, CODE, READONLY, ALIGN=2
-       THUMB
-       EXPORT  Start
 Start
-      ; TExaS_Init sets bus clock at 80 MHz
-      BL  TExaS_Init ; voltmeter, scope on PD3
-      ; you initialize PE1 PE0
+	; port F initialization
+	; enable the clock for port F
+	LDR r1, =SYSCTL_RCGCGPIO_R
+	LDR r0, [r1]
+	ORR r0, r0, #0x20
+	STR r0, [r1]
+	
+	; allow time for the clock to activate
+	NOP
+	NOP
 
-      CPSIE  I    ; TExaS voltmeter, scope runs on interrupts
+	; set PF3 as output (1), PF4 as input (0)
+	LDR r1, =GPIO_PORTF_DIR_R
+	MOV r0, #0x08
+	STR r0, [r1]
 
-loop  
-      ; you input output delay
-      B    loop
+	; enable PF3 and PF4
+	LDR r1, =GPIO_PORTF_DEN_R
+	MOV r0, #0x18
+	STR r0, [r1]
 
+	; set PUR for PF4
+	LDR r1, =GPIO_PORTF_PUR_R
+	MOV r0, #0x10
+	STR r0, [r1]
 
+	; set PF3 to off
+	LDR r1, =GPIO_PORTF_DATA_R
+	MOV r0, #0x00
+	STR r0, [r1]
 
+	; fall through to main
 
-      ALIGN      ; make sure the end of this section is aligned
-      END        ; end of file
+main
+	; delay by ~100ms
+	BL delay
+	
+	; read the value of PF4
+	LDR r1, =GPIO_PORTF_DATA_R
+	LDR r0, [r1]
+	AND r2, r0, #0x10
+
+	; if PF3 is 0 (switch is pressed), toggle the LED
+	CMP r2, #0x00
+	BEQ toggleLed
+
+	; else PF3 is 1 (switch is not pressed), turn off the LED
+	MOV r0, #0x00
+	STR r0, [r1]
+
+	; loop forever
+	B main
+
+toggleLed
+	; flip PF4 and write to the register
+	EOR r0, r0, #0x08
+	STR r0, [r1]
+
+	B main
+
+delay
+	; outerLoop will be called r0 times, innerLoop will be called r1 times
+	MOV r0, #10
+	MOV r1, #40000
+
+outerLoop
+	; move r1 into r2 so r1 is not overwritten
+	MOV r2, r1
+
+	; subtract 1 from r0, if not 0, go to innerLoop, otherwise the delay is done
+	SUBS r0, r0, #0x01
+	CMP r0, #0x00
+	BNE innerLoop
+	
+	; exit the delay subroutine
+	BX LR
+
+innerLoop
+	; subtract 1 from r2, if not 0, repeat innerLoop, otherwise go back to outerLoop
+	SUBS r2, r2, #0x01
+	CMP r2, #0x00;
+	BNE innerLoop
+
+	B outerLoop
+	
+	; end of program
+	ALIGN      ; make sure the end of this section is aligned
+	END        ; end of file
        
