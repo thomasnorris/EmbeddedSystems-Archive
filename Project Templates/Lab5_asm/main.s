@@ -35,12 +35,17 @@ GPIO_PORTE_DEN_R        EQU   0x4002451C
 GPIO_PORTE_AMSEL_R      EQU   0x40024528
 GPIO_PORTE_PCTL_R       EQU   0x4002452C
 SYSCTL_RCGCGPIO_R       EQU   0x400FE608
+	
+	IMPORT  TExaS_Init
 
 	AREA    |.text|, CODE, READONLY, ALIGN=2
 	THUMB
 	EXPORT  Start
 
 Start
+	; TExaS_Init sets bus clock at 80 MHz
+	BL  TExaS_Init
+
 	; port E initialization
 	; enable the clock for port E
 	LDR r1, =SYSCTL_RCGCGPIO_R
@@ -67,11 +72,11 @@ Start
 	MOV r0, #0x01
 	STR r0, [r1]
 
-	; fall through to main
+	; TExaS voltmeter, scope runs on interrupts
+	CPSIE  I
 
 main
 	; delay by ~62ms
-	; TODO: fix delay
 	BL delay
 	
 	; read the value of PE1
@@ -99,8 +104,8 @@ toggleLed
 
 delay
 	; outerLoop will be called r0 times, innerLoop will be called r1 times
-	MOV r0, #10
-	MOV r1, #40000
+	MOV r0, #35
+	MOV r1, #30000
 
 outerLoop
 	; move r1 into r2 so r1 is not overwritten
