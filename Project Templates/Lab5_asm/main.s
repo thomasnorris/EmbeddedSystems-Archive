@@ -70,19 +70,20 @@ Start
 	; fall through to main
 
 main
-	; delay by ~100ms
+	; delay by ~62ms
+	; TODO: fix delay
 	BL delay
 	
-	; read the value of PF4
+	; read the value of PE1
 	LDR r1, =GPIO_PORTE_DATA_R
 	LDR r0, [r1]
-	AND r2, r0, #0x10
+	AND r2, r0, #0x02
 
-	; if PF3 is 0 (switch is pressed), toggle the LED
-	CMP r2, #0x00
+	; if PE1 is 1 (switch is pressed), toggle the LED
+	CMP r2, #0x02
 	BEQ toggleLed
 
-	; else PF3 is 1 (switch is not pressed), turn off the LED
+	; else PE1 is 0 (switch is not pressed), turn off the LED
 	MOV r0, #0x00
 	STR r0, [r1]
 
@@ -90,8 +91,8 @@ main
 	B main
 
 toggleLed
-	; flip PF4 and write to the register
-	EOR r0, r0, #0x08
+	; flip PE0 and write to the register
+	EOR r0, r0, #0x01
 	STR r0, [r1]
 
 	B main
