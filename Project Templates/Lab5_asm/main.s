@@ -88,8 +88,8 @@ main
 	CMP r2, #0x02
 	BEQ toggleLed
 
-	; else PE1 is 0 (switch is not pressed), turn off the LED
-	MOV r0, #0x00
+	; else PE1 is 0 (switch is not pressed), turn on the LED
+	MOV r0, #0x01
 	STR r0, [r1]
 
 	; loop forever
