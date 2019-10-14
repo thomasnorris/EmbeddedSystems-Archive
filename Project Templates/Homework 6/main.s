@@ -43,8 +43,26 @@ Start
 	B loop
 
 ComputeSum
-	; sum all 10 numbers are return in r0
+	; sum first 4 numbers and store in r0
+	ADD r0, r0, r1
+	ADD r0, r0, r2
+	ADD r0, r0, r3
 
+	; load and sum last 6 numbers from the stack and store in r0
+	POP {r4}
+	ADD r0, r0, r4
+	POP {r4}
+	ADD r0, r0, r4
+	POP {r4}
+	ADD r0, r0, r4
+	POP {r4}
+	ADD r0, r0, r4
+	POP {r4}
+	ADD r0, r0, r4
+	POP {r4}
+	ADD r0, r0, r4
+
+	; r0 contains the sum
 	BX LR
 
 loop
