@@ -15,13 +15,25 @@
 	EXPORT  Start
 
 Start
-	; use registers r0 to r3 for first 4 parameters
+	; use registers r0 to r3 for first 4 numbers
 	MOV r0, #1
 	MOV r1, #2
 	MOV r2, #3
 	MOV r3, #4
 
 	; push last 6 numbers to the stack
+	MOV r4, #5
+	PUSH {r4}
+	MOV r4, #6
+	PUSH {r4}
+	MOV r4, #7
+	PUSH {r4}
+	MOV r4, #8
+	PUSH {r4}
+	MOV r4, #9
+	PUSH {r4}
+	MOV r4, #10
+	PUSH {r4}
 
 	; call subroutine
 	BL ComputeSum
@@ -31,7 +43,7 @@ Start
 	B loop
 
 ComputeSum
-	; sum all 10 numbers are return
+	; sum all 10 numbers are return in r0
 
 	BX LR
 
