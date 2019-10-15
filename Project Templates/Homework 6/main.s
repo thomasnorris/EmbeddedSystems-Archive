@@ -7,7 +7,7 @@
 ; Instructor: Gursel Serpen
 ; Homework Number: 6
 ; Brief description of the program
-;	Program for HW6
+;	Program for HW6 - Question 2
 ;*******************************************************************
 
 	AREA    |.text|, CODE, READONLY, ALIGN=2
