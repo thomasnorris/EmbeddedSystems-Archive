@@ -7,7 +7,7 @@
 ; Instructor: Gursel Serpen
 ; Homework Number: 6
 ; Brief description of the program
-;	Program for HW6
+;	Program for HW6 - Question 1
 ;*******************************************************************
 
 	AREA    |.text|, CODE, READONLY, ALIGN=2
@@ -21,7 +21,7 @@ Start
 	MOV r2, #3
 	MOV r3, #4
 
-	; push last 6 numbers to the stack
+	; push last 4 numbers to the stack
 	MOV r4, #5
 	PUSH {r4}
 	MOV r4, #6
@@ -30,16 +30,13 @@ Start
 	PUSH {r4}
 	MOV r4, #8
 	PUSH {r4}
-	MOV r4, #9
-	PUSH {r4}
-	MOV r4, #10
-	PUSH {r4}
 
 	; call subroutine
 	BL ComputeSum
 
 	; do something with the sum in r0
-
+	
+	; branch to forever loop
 	B loop
 
 ComputeSum
@@ -48,11 +45,7 @@ ComputeSum
 	ADD r0, r0, r2
 	ADD r0, r0, r3
 
-	; load and sum last 6 numbers from the stack and store in r0
-	POP {r4}
-	ADD r0, r0, r4
-	POP {r4}
-	ADD r0, r0, r4
+	; load and sum last 4 numbers from the stack and store in r0
 	POP {r4}
 	ADD r0, r0, r4
 	POP {r4}
@@ -62,7 +55,7 @@ ComputeSum
 	POP {r4}
 	ADD r0, r0, r4
 
-	; r0 contains the sum
+	; r0 contains the sum (0x24)
 	BX LR
 
 loop
