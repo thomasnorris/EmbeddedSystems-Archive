@@ -40,9 +40,9 @@ loop
 	; forever
 	B    loop
 
+	
 	AREA    |.text|, DATA, READONLY, ALIGN=2
 		
-
 strLen
 	DCD 8
 strToProcess
