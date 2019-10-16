@@ -22,5 +22,5 @@ loop
 	B    loop
 
 
-       ALIGN      ; make sure the end of this section is aligned
-       END        ; end of file
+	ALIGN      ; make sure the end of this section is aligned
+	END        ; end of file
