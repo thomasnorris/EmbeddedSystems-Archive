@@ -28,7 +28,7 @@ CalcHammingDistance
 
 loop
 	; forever
-	BL    loop
+	B    loop
 
 
 	AREA    |.text|, DATA, READONLY, ALIGN=2
