@@ -32,7 +32,9 @@ FindAllOnes
 	ADD r1, r1, #1         ; add 1 to the check counter
 	LSR r0, #1             ; shift r0 to the right by 1 bit to set the next LSB
 	
-	BL FindAllOnes         ; repeat (I used BL here because I get error A1875E on line 18 if I don't, why is that?)
+	POP {r4}               ; pop r4 from the stack
+	
+	B FindAllOnes          ; repeat
 	
 loop
 	; forever
