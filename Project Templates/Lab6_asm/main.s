@@ -10,17 +10,17 @@
 ;   If the switch is presses, the LED toggles at 8 Hz
 ; Hardware connections
 ;   PE1 is switch input  (1 means pressed, 0 means not pressed)
-;   PE0 is LED output (1 activates external LED on protoboard) 
+;   PE0 is LED output (1 activates external LED on protoboard)
 ; Overall functionality is similar to Lab 5, with three changes:
-;   1) Initialize SysTick with RELOAD 0x00FFFFFF 
-;   2) Add a heartbeat to PF2 that toggles every time through loop 
+;   1) Initialize SysTick with RELOAD 0x00FFFFFF
+;   2) Add a heartbeat to PF2 that toggles every time through loop
 ;   3) Add debugging dump of input, output, and time
 ; Operation
-;	1) Make PE0 an output and make PE1 an input. 
-;	2) The system starts with the LED on (make PE0 =1). 
+;	1) Make PE0 an output and make PE1 an input.
+;	2) The system starts with the LED on (make PE0 =1).
 ;   3) Wait about 62 ms
 ;   4) If the switch is pressed (PE1 is 1), then toggle the LED
-;      once, else turn the LED on. 
+;      once, else turn the LED on.
 ;   5) Steps 3 and 4 are repeated over and over
 ;*******************************************************************
 
@@ -48,46 +48,56 @@ NVIC_ST_RELOAD_R        EQU 0xE000E014
 NVIC_ST_CURRENT_R       EQU 0xE000E018
 GPIO_PORTE_AMSEL_R      EQU 0x40024528
 GPIO_PORTE_PCTL_R       EQU 0x4002452C
-           
-		   THUMB
-           AREA    DATA, ALIGN=4
+
+
+      AREA    DATA, ALIGN=4
+      THUMB
 SIZE       EQU    50
 ;You MUST use these two buffers and two variables
 ;You MUST not change their names
-DataBuffer SPACE  SIZE*4
-TimeBuffer SPACE  SIZE*4
-DataPt     SPACE  4
-TimePt     SPACE  4
-;These names MUST be exported
-           EXPORT DataBuffer  
-           EXPORT TimeBuffer  
-           EXPORT DataPt [DATA,SIZE=4] 
-           EXPORT TimePt [DATA,SIZE=4]
-    
-      ALIGN          
+DataBuffer
+      SPACE  SIZE*4
+TimeBuffer
+      SPACE  SIZE*4
+DataPt
+      SPACE  4
+TimePt
+      SPACE  4
+
+      ;These names MUST be exported
+      EXPORT DataBuffer
+      EXPORT TimeBuffer
+      EXPORT DataPt [DATA,SIZE=4]
+      EXPORT TimePt [DATA,SIZE=4]
+
+      ALIGN
+
+
       AREA    |.text|, CODE, READONLY, ALIGN=2
       THUMB
       EXPORT  Start
       IMPORT  TExaS_Init
 
-Start BL   TExaS_Init  ; running at 80 MHz, scope voltmeter on PD3
+Start
+      BL   TExaS_Init  ; running at 80 MHz, scope voltmeter on PD3
       ; initialize Port E
       ; initialize Port F
       ; initialize debugging dump, including SysTick
 
 
       CPSIE  I    ; TExaS voltmeter, scope runs on interrupts
-loop  BL   Debug_Capture
+loop
+      BL   Debug_Capture
       ;heartbeat
       ; Delay
       ;input PE1 test output PE0
-	  B    loop
+      B    loop
 
 ;------------Debug_Init------------
 ; Initializes the debugging instrument
 ; Note: push/pop an even number of registers so C compiler is happy
 Debug_Init
-      
+
 ; init SysTick
 
       BX LR
@@ -100,6 +110,5 @@ Debug_Capture
       BX LR
 
 
-    ALIGN      ; make sure the end of this section is aligned
-    END        ; end of file
-        
+      ALIGN      ; make sure the end of this section is aligned
+      END        ; end of file
