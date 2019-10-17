@@ -19,10 +19,12 @@ Start
 	LDR r1, secondNum              ; store the second numebr in r1
 	
 CalcHammingDistance
-	PUSH {r4}                      ; need r4 as an intermediate variable
+	PUSH {r4}                      ; need r4 as an intermediate variable, push to the stack
 	
-	EOR r4, r0, r1                 ; bitwise XOR r0 and r1 and store in r4
+	EOR r4, r0, r1                 ; bitwise XOR r0 and r1 and store in r4 to get the difference in bits
 	MOV r0, r4                     ; r4 contains the hamming distance, move to r0 and exit
+	
+	POP {r4}                       ; pop r4 from the stack
 
 loop
 	; forever
