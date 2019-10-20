@@ -52,6 +52,8 @@ GPIO_PORTE_PCTL_R       EQU 0x4002452C
 
 	AREA    DATA, ALIGN=4
 	THUMB
+		
+		
 SIZE       EQU    50
 ;You MUST use these two buffers and two variables
 ;You MUST not change their names
