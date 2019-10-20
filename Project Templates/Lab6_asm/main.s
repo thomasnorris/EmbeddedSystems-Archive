@@ -106,6 +106,13 @@ loop
 Debug_Init
 	; init SysTick
 	BL SysTick_Init
+	
+	; set DataBuffer and TimeBuffer to 0xFFFFFFFF
+	LDR r0, =DataBuffer
+	LDR r1, =TimeBuffer
+	MOV r2, #0xFFFFFFFF
+	STR r2, [r0]
+	STR r2, [r1]
 
 	BX LR
 
