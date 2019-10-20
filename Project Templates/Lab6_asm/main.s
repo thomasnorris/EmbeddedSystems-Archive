@@ -81,7 +81,8 @@ TimePt
 	IMPORT  TExaS_Init
 	IMPORT  SysTick_Init
 	
-
+; Note: In subroutines without parameters, r0, r1, etc were used as intermediate variables
+;       instead of r4, r5, etc
 Start
 	BL TExaS_Init  ; running at 80 MHz, scope voltmeter on PD3
 	; initialize port E
@@ -132,11 +133,19 @@ Debug_Init
 ; Dump Port E and time into buffers
 ; Note: push/pop an even number of registers so C compiler is happy
 Debug_Capture
-	
+	; compare DataPt and DataBuffer and return if the Buffer is full
 	LDR r0, =DataPt
 	LDR r1, =DataBuffer
 	CMP r0, r1
 	BLT loop
+	
+	; compare TimePt and TimeBuffer and return if the Buffer is full
+	LDR r0, =TimePt
+	LDR r1, =TimeBuffer
+	CMP r0, r1
+	BLT loop
+	
+	; TODO: read and store data
 	
 	BX LR
 
