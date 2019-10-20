@@ -113,6 +113,12 @@ Debug_Init
 	MOV r2, #0xFFFFFFFF
 	STR r2, [r0]
 	STR r2, [r1]
+	
+	; initialize pointers to the beginning address of DataBuffer and TimeBuffer
+	LDR r2, =DataPt
+	LDR r3, =TimePt
+	STR r0, [r2]
+	STR r1, [r3]
 
 	BX LR
 
@@ -120,7 +126,9 @@ Debug_Init
 ; Dump Port E and time into buffers
 ; Note: push/pop an even number of registers so C compiler is happy
 Debug_Capture
-
+	
+	
+	
 	BX LR
 
 ;------------PortE_Init------------
