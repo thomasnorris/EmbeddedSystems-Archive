@@ -104,9 +104,6 @@ loop
 ; Initializes the debugging instrument
 ; Note: push/pop an even number of registers so C compiler is happy
 Debug_Init
-	; init SysTick
-	BL SysTick_Init
-	
 	; set DataBuffer and TimeBuffer to 0xFFFFFFFF
 	LDR r0, =DataBuffer
 	LDR r1, =TimeBuffer
@@ -119,7 +116,16 @@ Debug_Init
 	LDR r3, =TimePt
 	STR r0, [r2]
 	STR r1, [r3]
+	
+	; preserve LR (and r0 but we only care about LR)
+	PUSH {r0, LR}
+	
+	; init SysTick
+	BL SysTick_Init
 
+	; pop LR (and r0 but we only care about LR)
+	POP {r0, LR}
+	
 	BX LR
 
 ;------------Debug_Capture------------
@@ -127,7 +133,10 @@ Debug_Init
 ; Note: push/pop an even number of registers so C compiler is happy
 Debug_Capture
 	
-	
+	LDR r0, =DataPt
+	LDR r1, =DataBuffer
+	CMP r0, r1
+	BLT loop
 	
 	BX LR
 
