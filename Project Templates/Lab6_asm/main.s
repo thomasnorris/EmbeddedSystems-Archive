@@ -50,67 +50,69 @@ GPIO_PORTE_AMSEL_R      EQU 0x40024528
 GPIO_PORTE_PCTL_R       EQU 0x4002452C
 
 
-      AREA    DATA, ALIGN=4
-      THUMB
+	AREA    DATA, ALIGN=4
+	THUMB
 SIZE       EQU    50
 ;You MUST use these two buffers and two variables
 ;You MUST not change their names
 DataBuffer
-      SPACE  SIZE*4
+	SPACE  SIZE*4
 TimeBuffer
-      SPACE  SIZE*4
+	SPACE  SIZE*4
 DataPt
-      SPACE  4
+	SPACE  4
 TimePt
-      SPACE  4
+	SPACE  4
 
-      ;These names MUST be exported
-      EXPORT DataBuffer
-      EXPORT TimeBuffer
-      EXPORT DataPt [DATA,SIZE=4]
-      EXPORT TimePt [DATA,SIZE=4]
+	;These names MUST be exported
+	EXPORT DataBuffer
+	EXPORT TimeBuffer
+	EXPORT DataPt [DATA,SIZE=4]
+	EXPORT TimePt [DATA,SIZE=4]
 
-      ALIGN
+	ALIGN
 
 
-      AREA    |.text|, CODE, READONLY, ALIGN=2
-      THUMB
-      EXPORT  Start
-      IMPORT  TExaS_Init
+	AREA    |.text|, CODE, READONLY, ALIGN=2
+	THUMB
+	EXPORT  Start
+	IMPORT  TExaS_Init
+	IMPORT  SysTick_Init
+	
 
 Start
-      BL TExaS_Init  ; running at 80 MHz, scope voltmeter on PD3
-	  ; initialize port E
-	  BL PortE_Init
-	  ; initialize port F
-	  BL PortF_Init
-      ; initialize debugging dump, including SysTick
-	  BL Debug_Init
+	BL TExaS_Init  ; running at 80 MHz, scope voltmeter on PD3
+	; initialize port E
+	BL PortE_Init
+	; initialize port F
+	BL PortF_Init
+	; initialize debugging dump, including SysTick
+	BL Debug_Init
 
 
-      CPSIE  I    ; TExaS voltmeter, scope runs on interrupts
+	CPSIE  I    ; TExaS voltmeter, scope runs on interrupts
 loop
-      BL   Debug_Capture
-      ;heartbeat
-      ; Delay
-      ;input PE1 test output PE0
-      B    loop
+	BL   Debug_Capture
+	;heartbeat
+	; Delay
+	;input PE1 test output PE0
+	B    loop
 
 ;------------Debug_Init------------
 ; Initializes the debugging instrument
 ; Note: push/pop an even number of registers so C compiler is happy
 Debug_Init
+	; init SysTick
+	BL SysTick_Init
 
-; init SysTick
-
-      BX LR
+	BX LR
 
 ;------------Debug_Capture------------
 ; Dump Port E and time into buffers
 ; Note: push/pop an even number of registers so C compiler is happy
 Debug_Capture
 
-      BX LR
+	BX LR
 
 ;------------PortE_Init------------
 ; Init Port E and set PE0 as output, PE1 as input
@@ -120,7 +122,7 @@ PortE_Init
 	LDR r0, [r1]
 	ORR r0, r0, #0x10
 	STR r0, [r1]
-	
+
 	; allow time for the clock to activate
 	NOP
 	NOP
