@@ -79,10 +79,13 @@ TimePt
       IMPORT  TExaS_Init
 
 Start
-      BL   TExaS_Init  ; running at 80 MHz, scope voltmeter on PD3
-      ; initialize Port E
-      ; initialize Port F
+      BL TExaS_Init  ; running at 80 MHz, scope voltmeter on PD3
+	  ; initialize port E
+	  BL PortE_Init
+	  ; initialize port F
+	  BL PortF_Init
       ; initialize debugging dump, including SysTick
+	  BL Debug_Init
 
 
       CPSIE  I    ; TExaS voltmeter, scope runs on interrupts
@@ -109,6 +112,66 @@ Debug_Capture
 
       BX LR
 
+;------------PortE_Init------------
+; Init Port E and set PE0 as output, PE1 as input
+PortE_Init
+	; enable the clock for port E
+	LDR r1, =SYSCTL_RCGCGPIO_R
+	LDR r0, [r1]
+	ORR r0, r0, #0x10
+	STR r0, [r1]
+	
+	; allow time for the clock to activate
+	NOP
+	NOP
 
-      ALIGN      ; make sure the end of this section is aligned
-      END        ; end of file
+	; set PE0 as output (1), PE1 as input (0)
+	LDR r1, =GPIO_PORTE_DIR_R
+	MOV r0, #0x01
+	STR r0, [r1]
+
+	; enable PE0 and PE1
+	LDR r1, =GPIO_PORTE_DEN_R
+	MOV r0, #0x03
+	STR r0, [r1]
+
+	; set PE0 to ON
+	LDR r1, =GPIO_PORTE_DATA_R
+	MOV r0, #0x01
+	STR r0, [r1]
+
+	BX LR
+
+;------------PortF_Init------------
+; Init Port F and set PF0 as output
+PortF_Init
+	; enable the clock for port F
+	LDR r1, =SYSCTL_RCGCGPIO_R
+	LDR r0, [r1]
+	ORR r0, r0, #0x20
+	STR r0, [r1]
+	
+	; allow time for the clock to activate
+	NOP
+	NOP
+
+	; set PF2 as an output (1)
+	LDR r1, =GPIO_PORTF_DIR_R
+	MOV r0, #0x04
+	STR r0, [r1]
+	
+	; enable PF2
+	LDR r1, =GPIO_PORTF_DEN_R
+	MOV r0, #0x04
+	STR r0, [r1]
+	
+	; set PF2 to ON
+	LDR r1, =GPIO_PORTF_DATA_R
+	MOV r0, #0x04
+	STR r0, [r1]
+	
+	BX LR
+
+
+	ALIGN      ; make sure the end of this section is aligned
+	END        ; end of file
