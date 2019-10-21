@@ -1,6 +1,6 @@
 ;*******************************************************************
 ; main.s
-; Author: Thomas Norris
+; Author: Thomas Norris, Juliette Ulman
 ; Date Created: 10/20/19
 ; Last Modified: 10/20/19
 ; Section Number: 003
@@ -24,8 +24,8 @@
 ;   5) Steps 3 and 4 are repeated over and over
 ;*******************************************************************
 
-SWITCH                  EQU 0x40024004  ;PE0
-LED                     EQU 0x40024008  ;PE1
+LED                     EQU 0x40024004  ;PE0
+SWITCH                  EQU 0x40024008  ;PE1
 SYSCTL_RCGCGPIO_R       EQU 0x400FE608
 SYSCTL_RCGC2_GPIOE      EQU 0x00000010  ;port E Clock Gating Control
 SYSCTL_RCGC2_GPIOF      EQU 0x00000020  ;port F Clock Gating Control
@@ -94,6 +94,7 @@ Start
 
 
 	CPSIE  I    ; TExaS voltmeter, scope runs on interrupts
+
 loop
 	BL   Debug_Capture
 	;heartbeat
@@ -140,12 +141,40 @@ Debug_Capture
 	BLT loop
 
 	; compare TimePt and TimeBuffer and return if the Buffer is full
-	LDR r0, =TimePt
-	LDR r1, =TimeBuffer
-	CMP r0, r1
+	LDR r2, =TimePt
+	LDR r3, =TimeBuffer
+	CMP r2, r3
 	BLT loop
 
-	; TODO: read and store data
+	; save registers needed
+	PUSH{r4, r5, r6, r7}
+	
+	; get systick value and save in TimeBuffer
+	LDR r4, =NVIC_ST_CURRENT_R
+	LDR r5, [r4]
+	STR r5, [r3]
+	
+	; read PE0-1
+	LDR r4, =SWITCH
+	LDR r5, [r4], #4
+	LDR r6, =LED
+	LDR r7, [r6], #4
+	
+	; shift PE1 4 bits left
+	LSL r7, r7, #4
+	
+	; combine to load
+	ORR r7, r7, r5
+	
+	; Load PE0-1 into DataBuffer
+	LDR r7, [r0]
+	
+	
+	;repoint buffer pointers (increment to next addresses)
+	
+	
+	;Restore any registers saved and return
+	POP{r4, r5, r6, r7}
 
 	BX LR
 
