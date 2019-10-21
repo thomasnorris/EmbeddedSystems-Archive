@@ -134,12 +134,20 @@ Debug_Init
 ; Dump Port E and time into buffers
 ; Note: push/pop an even number of registers so C compiler is happy
 Debug_Capture
-	; r1 is DataBuffer, r3 is TimeBuffer
+	; r0 = DataPt value
+	; r1 = DataBuffer address
+	; r2 = TimePt value
+	; r3 = TimeBuffer address
+	; r4 = NVIC_ST_CURRENT_R value 
+	; r5 = SWITCH address
+	; r6 = SWITCH value
+	; r7 = LED address
+	; r8 = LED value / LED-SWITCH value
 	; compare the value of DataPt and the address of DataBuffer and return if the Buffer is full
 	LDR r0, =DataPt
-	LDR r1, [r0]
-	LDR r2, =DataBuffer
-	CMP r0, r2
+	LDR r0, [r0]
+	LDR r1, =DataBuffer
+	CMP r0, r1
 	BLT loop
 
 	; compare the value of TimePt and the address of TimeBuffer and return if the Buffer is full
@@ -154,23 +162,23 @@ Debug_Capture
 	
 	; get systick value and save in TimeBuffer
 	LDR r4, =NVIC_ST_CURRENT_R
-	LDR r5, [r4]
-	STR r5, [r3]
+	LDR r4, [r4]
+	STR r4, [r3]
 	
 	; read PE0 and PE1
-	LDR r4, =SWITCH
-	LDR r5, [r4], #4
-	LDR r6, =LED
-	LDR r7, [r6], #4
+	LDR r5, =SWITCH
+	LDR r6, [r5], #4
+	LDR r7, =LED
+	LDR r8, [r7], #4
 	
 	; shift PE1 4 bits left
-	LSL r7, r7, #4
+	LSL r8, r8, #4
 	
 	; combine PE0 and PE1 into PE0-1
-	ORR r7, r7, r5
+	ORR r8, r8, r6
 	
 	; store PE0-1 into DataBuffer
-	STR r7, [r1]
+	STR r8, [r1]
 	
 	; repoint buffer pointers (increment to next addresses)
 	
