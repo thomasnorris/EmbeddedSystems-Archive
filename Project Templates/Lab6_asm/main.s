@@ -1,10 +1,10 @@
 ;*******************************************************************
 ; main.s
-; Author: ***update this***
-; Date Created: 11/18/2016
-; Last Modified: 11/18/2016
-; Section Number: ***update this***
-; Instructor: ***update this***
+; Author: Thomas Norris
+; Date Created: 10/20/19
+; Last Modified: 10/20/19
+; Section Number: 003
+; Instructor: Gursel Serpen
 ; Lab number: 6
 ; Brief description of the program
 ;   If the switch is presses, the LED toggles at 8 Hz
@@ -52,8 +52,8 @@ GPIO_PORTE_PCTL_R       EQU 0x4002452C
 
 	AREA    DATA, ALIGN=4
 	THUMB
-		
-		
+
+
 SIZE       EQU    50
 ;You MUST use these two buffers and two variables
 ;You MUST not change their names
@@ -80,7 +80,7 @@ TimePt
 	EXPORT  Start
 	IMPORT  TExaS_Init
 	IMPORT  SysTick_Init
-	
+
 ; Note: In subroutines without parameters, r0, r1, etc were used as intermediate variables
 ;       instead of r4, r5, etc
 Start
@@ -111,22 +111,22 @@ Debug_Init
 	MOV r2, #0xFFFFFFFF
 	STR r2, [r0]
 	STR r2, [r1]
-	
+
 	; initialize pointers to the beginning address of DataBuffer and TimeBuffer
 	LDR r2, =DataPt
 	LDR r3, =TimePt
 	STR r0, [r2]
 	STR r1, [r3]
-	
+
 	; preserve LR (and r0 but we only care about LR)
 	PUSH {r0, LR}
-	
+
 	; init SysTick
 	BL SysTick_Init
 
 	; pop LR (and r0 but we only care about LR)
 	POP {r0, LR}
-	
+
 	BX LR
 
 ;------------Debug_Capture------------
@@ -138,15 +138,15 @@ Debug_Capture
 	LDR r1, =DataBuffer
 	CMP r0, r1
 	BLT loop
-	
+
 	; compare TimePt and TimeBuffer and return if the Buffer is full
 	LDR r0, =TimePt
 	LDR r1, =TimeBuffer
 	CMP r0, r1
 	BLT loop
-	
+
 	; TODO: read and store data
-	
+
 	BX LR
 
 ;------------PortE_Init------------
@@ -187,7 +187,7 @@ PortF_Init
 	LDR r0, [r1]
 	ORR r0, r0, #0x20
 	STR r0, [r1]
-	
+
 	; allow time for the clock to activate
 	NOP
 	NOP
@@ -196,17 +196,17 @@ PortF_Init
 	LDR r1, =GPIO_PORTF_DIR_R
 	MOV r0, #0x04
 	STR r0, [r1]
-	
+
 	; enable PF2
 	LDR r1, =GPIO_PORTF_DEN_R
 	MOV r0, #0x04
 	STR r0, [r1]
-	
+
 	; set PF2 to ON
 	LDR r1, =GPIO_PORTF_DATA_R
 	MOV r0, #0x04
 	STR r0, [r1]
-	
+
 	BX LR
 
 
