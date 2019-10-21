@@ -415,6 +415,11 @@
               <FileType>2</FileType>
               <FilePath>.\main.s</FilePath>
             </File>
+            <File>
+              <FileName>SysTick.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\SysTick.s</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
