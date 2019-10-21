@@ -134,14 +134,17 @@ Debug_Init
 ; Dump Port E and time into buffers
 ; Note: push/pop an even number of registers so C compiler is happy
 Debug_Capture
-	; compare DataPt and DataBuffer and return if the Buffer is full
+	; r1 is DataBuffer, r3 is TimeBuffer
+	; compare the value of DataPt and the address of DataBuffer and return if the Buffer is full
 	LDR r0, =DataPt
-	LDR r1, =DataBuffer
-	CMP r0, r1
+	LDR r1, [r0]
+	LDR r2, =DataBuffer
+	CMP r0, r2
 	BLT loop
 
-	; compare TimePt and TimeBuffer and return if the Buffer is full
+	; compare the value of TimePt and the address of TimeBuffer and return if the Buffer is full
 	LDR r2, =TimePt
+	LDR r2, [r2]
 	LDR r3, =TimeBuffer
 	CMP r2, r3
 	BLT loop
@@ -154,7 +157,7 @@ Debug_Capture
 	LDR r5, [r4]
 	STR r5, [r3]
 	
-	; read PE0-1
+	; read PE0 and PE1
 	LDR r4, =SWITCH
 	LDR r5, [r4], #4
 	LDR r6, =LED
@@ -163,17 +166,15 @@ Debug_Capture
 	; shift PE1 4 bits left
 	LSL r7, r7, #4
 	
-	; combine to load
+	; combine PE0 and PE1 into PE0-1
 	ORR r7, r7, r5
 	
-	; Load PE0-1 into DataBuffer
-	LDR r7, [r0]
+	; store PE0-1 into DataBuffer
+	STR r7, [r1]
 	
+	; repoint buffer pointers (increment to next addresses)
 	
-	;repoint buffer pointers (increment to next addresses)
-	
-	
-	;Restore any registers saved and return
+	; restore any registers saved and return
 	POP{r4, r5, r6, r7}
 
 	BX LR
