@@ -103,6 +103,7 @@ main
 	; delay by ~62ms
 	BL delay
 	
+	; store r0 - r3
 	PUSH {r0, r1, r2, r3}
 	
 	; read the value of PE1
@@ -135,7 +136,7 @@ toggleLed
 ;------------delay------------
 ; Toggle PF2 as a heartbeat
 delay
-	; need r0, r1, r2
+	; store r0 - r3
 	PUSH {r0, r1, r2, r3}
 
 	; delayOuterLoop will be called r0 times, delayInnerLoop will be called r1 times
@@ -168,16 +169,16 @@ delayInnerLoop
 ;------------heartbeat------------
 ; Toggle PF2 as a heartbeat
 heartbeat
-	; r0 - r3 are in use at this time
-	PUSH {r4, r5}
+	; store r0 - r3
+	PUSH {r0, r1, r2, r3}
 	
 	; flip PF2
-	LDR r4, =GPIO_PORTF_DATA_R
-	LDR r5, [r4]
-	EOR r5, r5, #0x04
-	STR r5, [r4]
+	LDR r0, =GPIO_PORTF_DATA_R
+	LDR r1, [r0]
+	EOR r1, r1, #0x04
+	STR r1, [r0]
 	
-	POP {r4, r5}
+	POP {r0, r1, r2, r3}
 	
 	BX LR
 
