@@ -91,30 +91,19 @@ Start
 	; initialize debugging dump, including SysTick
 	BL debugInit
 	
-	; load initial addresses for the two Buffers
-	LDR r1, =DataBuffer
-	LDR r3, =TimeBuffer
-	
 	CPSIE  I    ; TExaS voltmeter, scope runs on interrupts
 
 main
-	; save Buffer addresses r1 and r3
-	PUSH {r1, r3}
-	
 	; heartbeat
 	BL heartbeat
-	
-	; restore r1 and r3
-	POP {r1, r3}
-	
+		
 	; capture PE0 and PE1
 	BL debugCapture
-	
-	; save r1 and r3
-	PUSH {r1, r3}
-	
+		
 	; delay by ~62ms
 	BL delay
+	
+	PUSH {r0, r1, r2, r3}
 	
 	; read the value of PE1
 	LDR r1, =GPIO_PORTE_DATA_R
@@ -129,8 +118,7 @@ main
 	MOV r0, #0x01
 	STR r0, [r1]
 	
-	; restore r1 and r3
-	POP {r1, r3}
+	POP {r0, r1, r2, r3}
 	
 	B main
 	
@@ -139,8 +127,7 @@ toggleLed
 	EOR r0, r0, #0x01
 	STR r0, [r1]
 	
-	; restore r1 and r3
-	POP {r1, r3}
+	POP {r0, r1, r2, r3}
 	
 	B main
 
@@ -148,6 +135,9 @@ toggleLed
 ;------------delay------------
 ; Toggle PF2 as a heartbeat
 delay
+	; need r0, r1, r2
+	PUSH {r0, r1, r2, r3}
+
 	; delayOuterLoop will be called r0 times, delayInnerLoop will be called r1 times
 	MOV r0, #35
 	MOV r1, #30000
@@ -161,6 +151,8 @@ delayOuterLoop
 	CMP r0, #0x00
 	BNE delayInnerLoop
 	
+	POP {r0, r1, r2, r3}
+		
 	; exit the delay subroutine
 	BX LR
 
@@ -176,11 +168,16 @@ delayInnerLoop
 ;------------heartbeat------------
 ; Toggle PF2 as a heartbeat
 heartbeat
+	; r0 - r3 are in use at this time
+	PUSH {r4, r5}
+	
 	; flip PF2
-	LDR r0, =GPIO_PORTF_DATA_R
-	LDR r1, [r0]
-	EOR r1, r1, #0x04
-	STR r1, [r0]
+	LDR r4, =GPIO_PORTF_DATA_R
+	LDR r5, [r4]
+	EOR r5, r5, #0x04
+	STR r5, [r4]
+	
+	POP {r4, r5}
 	
 	BX LR
 
@@ -200,51 +197,50 @@ debugInit
 	STR r0, [r2]
 	STR r1, [r3]
 
-	; preserve LR (and r0 but we only care about LR)
-	PUSH {r0, LR}
+	; preserve registers
+	PUSH {r0, r1, r2, r3, LR, r4}
 
 	; init SysTick
 	BL SysTick_Init
 
-	; pop LR (and r0 but we only care about LR)
-	POP {r0, LR}
+	; restore registers
+	POP {r0, r1, r2, r3, LR, r4}
 
 	BX LR
 
 ;------------debugCapture------------
 ; Dump Port E values and time into buffers
 debugCapture
-	; r0 = DataPt address
+	; r0 = DataBuffer address
+	; r1 = TimeBuffer address
+	; r2 = DataPt address
 	; r9 = DataPt value
-	; r1 = DataBuffer address
-	; r2 = TimePt address
+	; r3 = TimePt address
 	; r10 = TimePt value
-	; r3 = TimeBuffer address
-	; r4 = NVIC_ST_CURRENT_R value 
+	; r4 = NVIC_ST_CURRENT_R value
+	
 	; r5 = SWITCH address
 	; r6 = SWITCH value
 	; r7 = LED address
 	; r8 = LED value / LED-SWITCH value
 	
-	; save registers needed (and r11) outside of r0 - r3
+	; must preserve r0 - r3
 	PUSH {r4, r5, r6, r7, r8, r9, r10, r11}
 	
 	; compare the value of DataPt and the address of DataBuffer and return if the Buffer is full
-	LDR r0, =DataPt
-	LDR r9, [r0]
-	CMP r9, r1
+	LDR r9, [r2]
+	CMP r9, r0
 	BLT main
 
 	; compare the value of TimePt and the address of TimeBuffer and return if the Buffer is full
-	LDR r2, =TimePt
-	LDR r10, [r2]
-	CMP r10, r3
+	LDR r10, [r3]
+	CMP r10, r1
 	BLT main
 	
 	; get systick value and save in TimeBuffer
 	LDR r4, =NVIC_ST_CURRENT_R
 	LDR r4, [r4]
-	STR r4, [r3]
+	STR r4, [r1]
 	
 	; read PE1 and PE0
 	LDR r5, =SWITCH
@@ -252,7 +248,7 @@ debugCapture
 	LDR r7, =LED
 	LDR r8, [r7]
 	
-	; shift PE1 1 bit right, 4 bits left
+	; shift PE1 1 bit right, then 4 bits left
 	LSR r6, r6, #1
 	LSL r6, r6, #4
 	
@@ -260,19 +256,19 @@ debugCapture
 	ORR r8, r8, r6
 	
 	; store PE0-1 into DataBuffer
-	STR r8, [r1]
+	STR r8, [r0]
 	
-	; increment DataBuffer by #1 for next 8 bits, reuse r4
-	LDR r4, [r1], #1
+	; increment DataBuffer by #1 for next 8 bits
+	LDR r4, [r0], #1
 	
-	; increment TimeBuffer by #3 for next 12 bits, reuse r4
-	LDR r4, [r3], #3
+	; increment TimeBuffer by #3 for next 12 bits
+	LDR r4, [r1], #3
 	
 	; increment buffer pointer addresses
 	ADD r9, r9, #1
-	STR r9, [r0]
+	STR r9, [r2]
 	ADD r10, r10, #3
-	STR r10, [r2]
+	STR r10, [r3]
 	
 	; restore any registers saved and return
 	POP {r4, r5, r6, r7, r8, r9, r10, r11}
