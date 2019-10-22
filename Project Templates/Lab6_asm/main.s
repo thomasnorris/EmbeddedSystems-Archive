@@ -95,7 +95,10 @@ Start
 	CPSIE  I    ; TExaS voltmeter, scope runs on interrupts
 
 loop
+	; heartbeat
 	BL heartBeat
+	
+	; capture PE0 and PE1
 	BL Debug_Capture
 	
 	; delay by ~62ms
@@ -220,20 +223,24 @@ Debug_Capture
 	LDR r4, [r4]
 	STR r4, [r3]
 	
-	; read PE0 and PE1
+	; read PE1 and PE0
 	LDR r5, =SWITCH
 	LDR r6, [r5], #4
 	LDR r7, =LED
 	LDR r8, [r7], #4
 	
-	; shift PE1 4 bits left
-	LSL r8, r8, #4
+	; shift PE1 1 bit right, 4 bits left
+	LSR r6, r6, #1
+	LSL r6, r6, #4
 	
 	; combine PE0 and PE1 into PE0-1
 	ORR r8, r8, r6
 	
 	; store PE0-1 into DataBuffer
 	STR r8, [r1]
+	
+	LDR r9, =DataBuffer
+	LDR r9, [r9]
 	
 	; repoint buffer pointers (increment to next addresses)
 	
