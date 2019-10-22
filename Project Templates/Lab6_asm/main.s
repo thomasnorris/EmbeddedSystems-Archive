@@ -91,16 +91,63 @@ Start
 	BL PortF_Init
 	; initialize debugging dump, including SysTick
 	BL Debug_Init
-
-
+	
 	CPSIE  I    ; TExaS voltmeter, scope runs on interrupts
 
 loop
-	BL   Debug_Capture
-	;heartbeat
-	; Delay
+	BL Debug_Capture
+	; TODO: heartbeat
+	
+	; delay by ~62ms
+	BL delay
+	
+	; read the value of PE1
+	LDR r1, =GPIO_PORTE_DATA_R
+	LDR r0, [r1]
+	AND r2, r0, #0x02
+
+	; if PE1 is 1 (switch is pressed), toggle the LED
+	CMP r2, #0x02
+	BEQ toggleLed
+
+	; else PE1 is 0 (switch is not pressed), turn on the LED
+	MOV r0, #0x01
+	STR r0, [r1]
+	
 	;input PE1 test output PE0
 	B    loop
+	
+toggleLed
+	; flip PE0 and write to the register
+	EOR r0, r0, #0x01
+	STR r0, [r1]
+	
+	B loop
+	
+delay
+	; outerLoop will be called r0 times, innerLoop will be called r1 times
+	MOV r0, #35
+	MOV r1, #30000
+
+outerLoop
+	; move r1 into r2 so r1 is not overwritten
+	MOV r2, r1
+
+	; subtract 1 from r0, if not 0, go to innerLoop, otherwise the delay is done
+	SUBS r0, r0, #0x01
+	CMP r0, #0x00
+	BNE innerLoop
+	
+	; exit the delay subroutine
+	BX LR
+
+innerLoop
+	; subtract 1 from r2, if not 0, repeat innerLoop, otherwise go back to outerLoop
+	SUBS r2, r2, #0x01
+	CMP r2, #0x00;
+	BNE innerLoop
+
+	B outerLoop
 
 ;------------Debug_Init------------
 ; Initializes the debugging instrument
@@ -158,7 +205,7 @@ Debug_Capture
 	BLT loop
 
 	; save registers needed
-	PUSH{r4, r5, r6, r7}
+	PUSH{r3, r4, r5, r6, r7, r8}
 	
 	; get systick value and save in TimeBuffer
 	LDR r4, =NVIC_ST_CURRENT_R
@@ -183,7 +230,7 @@ Debug_Capture
 	; repoint buffer pointers (increment to next addresses)
 	
 	; restore any registers saved and return
-	POP{r4, r5, r6, r7}
+	POP{r3, r4, r5, r6, r7, r8}
 
 	BX LR
 
