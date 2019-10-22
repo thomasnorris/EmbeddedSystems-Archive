@@ -17,7 +17,7 @@
 ;   3) Add debugging dump of input, output, and time
 ; Operation
 ;	1) Make PE0 an output and make PE1 an input.
-;	2) The system starts with the LED on (make PE0 =1).
+;	2) The system starts with the LED on (make PE0 =1)
 ;   3) Wait about 62 ms
 ;   4) If the switch is pressed (PE1 is 1), then toggle the LED
 ;      once, else turn the LED on.
@@ -92,15 +92,21 @@ Start
 	; initialize debugging dump, including SysTick
 	BL Debug_Init
 	
+	; load initial addresses for the two Buffers
+	LDR r1, =DataBuffer
+	LDR r3, =TimeBuffer
+	
 	CPSIE  I    ; TExaS voltmeter, scope runs on interrupts
 
 loop
-	; heartbeat
+	PUSH {r1, r3}
 	BL heartBeat
+	POP {r1, r3}
 	
 	; capture PE0 and PE1
 	BL Debug_Capture
 	
+	PUSH {r1, r3}
 	; delay by ~62ms
 	BL delay
 	
@@ -117,12 +123,16 @@ loop
 	MOV r0, #0x01
 	STR r0, [r1]
 	
+	POP {r1, r3}
+	
 	B loop
 	
 toggleLed
 	; flip PE0 and write to the register
 	EOR r0, r0, #0x01
 	STR r0, [r1]
+	
+	POP {r1, r3}
 	
 	B loop
 	
@@ -192,31 +202,32 @@ Debug_Init
 ; Dump Port E and time into buffers
 ; Note: push/pop an even number of registers so C compiler is happy
 Debug_Capture
-	; r0 = DataPt value
+	; r0 = DataPt address
+	; r9 = DataPt value
 	; r1 = DataBuffer address
-	; r2 = TimePt value
+	; r2 = TimePt address
+	; r10 = TimePt value
 	; r3 = TimeBuffer address
 	; r4 = NVIC_ST_CURRENT_R value 
 	; r5 = SWITCH address
 	; r6 = SWITCH value
 	; r7 = LED address
 	; r8 = LED value / LED-SWITCH value
+	
+	; save registers needed (and r11) outside of r0 - r3
+	PUSH {r4, r5, r6, r7, r8, r9, r10, r11}
+	
 	; compare the value of DataPt and the address of DataBuffer and return if the Buffer is full
 	LDR r0, =DataPt
-	LDR r0, [r0]
-	LDR r1, =DataBuffer
-	CMP r0, r1
+	LDR r9, [r0]
+	CMP r9, r1
 	BLT loop
 
 	; compare the value of TimePt and the address of TimeBuffer and return if the Buffer is full
 	LDR r2, =TimePt
-	LDR r2, [r2]
-	LDR r3, =TimeBuffer
-	CMP r2, r3
+	LDR r10, [r2]
+	CMP r10, r3
 	BLT loop
-
-	; save registers needed
-	PUSH{r3, r4, r5, r6, r7, r8}
 	
 	; get systick value and save in TimeBuffer
 	LDR r4, =NVIC_ST_CURRENT_R
@@ -225,9 +236,9 @@ Debug_Capture
 	
 	; read PE1 and PE0
 	LDR r5, =SWITCH
-	LDR r6, [r5], #4
+	LDR r6, [r5]
 	LDR r7, =LED
-	LDR r8, [r7], #4
+	LDR r8, [r7]
 	
 	; shift PE1 1 bit right, 4 bits left
 	LSR r6, r6, #1
@@ -239,13 +250,18 @@ Debug_Capture
 	; store PE0-1 into DataBuffer
 	STR r8, [r1]
 	
-	LDR r9, =DataBuffer
-	LDR r9, [r9]
+	; increment Buffer addresses, reuse r4
+	LDR r4, [r1], #4
+	LDR r4, [r3], #4
 	
-	; repoint buffer pointers (increment to next addresses)
+	; increment buffer pointer addresses
+	ADD r9, r9, #4
+	STR r9, [r0]
+	ADD r10, r10, #4
+	STR r10, [r2]
 	
 	; restore any registers saved and return
-	POP{r3, r4, r5, r6, r7, r8}
+	POP {r4, r5, r6, r7, r8, r9, r10, r11}
 
 	BX LR
 
