@@ -13,7 +13,7 @@
 ;   PE0 is LED output (1 activates external LED on protoboard)
 ; Overall functionality is similar to Lab 5, with three changes:
 ;   1) Initialize SysTick with RELOAD 0x00FFFFFF
-;   2) Add a heartbeat to PF2 that toggles every time through loop
+;   2) Add a heartbeat to PF2 that toggles every time through main
 ;   3) Add debugging dump of input, output, and time
 ; Operation
 ;	1) Make PE0 an output and make PE1 an input.
@@ -55,8 +55,8 @@ GPIO_PORTE_PCTL_R       EQU 0x4002452C
 
 
 SIZE       EQU    50
-;You MUST use these two buffers and two variables
-;You MUST not change their names
+; You MUST use these two buffers and two variables
+; You MUST not change their names
 DataBuffer
 	SPACE  SIZE*4
 TimeBuffer
@@ -66,7 +66,7 @@ DataPt
 TimePt
 	SPACE  4
 
-	;These names MUST be exported
+	; These names MUST be exported
 	EXPORT DataBuffer
 	EXPORT TimeBuffer
 	EXPORT DataPt [DATA,SIZE=4]
@@ -81,16 +81,15 @@ TimePt
 	IMPORT  TExaS_Init
 	IMPORT  SysTick_Init
 
-; Note: In subroutines without parameters, r0, r1, etc were used as intermediate variables
-;       instead of r4, r5, etc
+
 Start
 	BL TExaS_Init  ; running at 80 MHz, scope voltmeter on PD3
 	; initialize port E
-	BL PortE_Init
+	BL portEInit
 	; initialize port F
-	BL PortF_Init
+	BL portFInit
 	; initialize debugging dump, including SysTick
-	BL Debug_Init
+	BL debugInit
 	
 	; load initial addresses for the two Buffers
 	LDR r1, =DataBuffer
@@ -98,13 +97,16 @@ Start
 	
 	CPSIE  I    ; TExaS voltmeter, scope runs on interrupts
 
-loop
+main
+	; save Buffer addresses r1 and r3
 	PUSH {r1, r3}
-	BL heartBeat
+	
+	; heartbeat
+	BL heartbeat
 	POP {r1, r3}
 	
 	; capture PE0 and PE1
-	BL Debug_Capture
+	BL debugCapture
 	
 	PUSH {r1, r3}
 	; delay by ~62ms
@@ -125,7 +127,7 @@ loop
 	
 	POP {r1, r3}
 	
-	B loop
+	B main
 	
 toggleLed
 	; flip PE0 and write to the register
@@ -134,35 +136,41 @@ toggleLed
 	
 	POP {r1, r3}
 	
-	B loop
-	
+	B main
+
+
+;------------delay------------
+; Toggle PF2 as a heartbeat
 delay
-	; outerLoop will be called r0 times, innerLoop will be called r1 times
+	; delayOuterLoop will be called r0 times, delayInnerLoop will be called r1 times
 	MOV r0, #35
 	MOV r1, #30000
 
-outerLoop
+delayOuterLoop
 	; move r1 into r2 so r1 is not overwritten
 	MOV r2, r1
 
-	; subtract 1 from r0, if not 0, go to innerLoop, otherwise the delay is done
+	; subtract 1 from r0, if not 0, go to delayInnerLoop, otherwise the delay is done
 	SUBS r0, r0, #0x01
 	CMP r0, #0x00
-	BNE innerLoop
+	BNE delayInnerLoop
 	
 	; exit the delay subroutine
 	BX LR
 
-innerLoop
-	; subtract 1 from r2, if not 0, repeat innerLoop, otherwise go back to outerLoop
+delayInnerLoop
+	; subtract 1 from r2, if not 0, repeat delayInnerLoop, otherwise go back to delayOuterLoop
 	SUBS r2, r2, #0x01
 	CMP r2, #0x00;
-	BNE innerLoop
+	BNE delayInnerLoop
 
-	B outerLoop
+	B delayOuterLoop
 
-heartBeat
-	; flip PF2 and write to the register
+
+;------------heartbeat------------
+; Toggle PF2 as a heartbeat
+heartbeat
+	; flip PF2
 	LDR r0, =GPIO_PORTF_DATA_R
 	LDR r1, [r0]
 	EOR r1, r1, #0x04
@@ -170,10 +178,9 @@ heartBeat
 	
 	BX LR
 
-;------------Debug_Init------------
+;------------debugInit------------
 ; Initializes the debugging instrument
-; Note: push/pop an even number of registers so C compiler is happy
-Debug_Init
+debugInit
 	; set DataBuffer and TimeBuffer to 0xFFFFFFFF
 	LDR r0, =DataBuffer
 	LDR r1, =TimeBuffer
@@ -198,10 +205,9 @@ Debug_Init
 
 	BX LR
 
-;------------Debug_Capture------------
-; Dump Port E and time into buffers
-; Note: push/pop an even number of registers so C compiler is happy
-Debug_Capture
+;------------debugCapture------------
+; Dump Port E values and time into buffers
+debugCapture
 	; r0 = DataPt address
 	; r9 = DataPt value
 	; r1 = DataBuffer address
@@ -221,13 +227,13 @@ Debug_Capture
 	LDR r0, =DataPt
 	LDR r9, [r0]
 	CMP r9, r1
-	BLT loop
+	BLT main
 
 	; compare the value of TimePt and the address of TimeBuffer and return if the Buffer is full
 	LDR r2, =TimePt
 	LDR r10, [r2]
 	CMP r10, r3
-	BLT loop
+	BLT main
 	
 	; get systick value and save in TimeBuffer
 	LDR r4, =NVIC_ST_CURRENT_R
@@ -265,9 +271,9 @@ Debug_Capture
 
 	BX LR
 
-;------------PortE_Init------------
+;------------portEInit------------
 ; Init Port E and set PE0 as output, PE1 as input
-PortE_Init
+portEInit
 	; enable the clock for port E
 	LDR r1, =SYSCTL_RCGCGPIO_R
 	LDR r0, [r1]
@@ -295,9 +301,9 @@ PortE_Init
 
 	BX LR
 
-;------------PortF_Init------------
+;------------portFInit------------
 ; Init Port F and set PF0 as output
-PortF_Init
+portFInit
 	; enable the clock for port F
 	LDR r1, =SYSCTL_RCGCGPIO_R
 	LDR r0, [r1]
