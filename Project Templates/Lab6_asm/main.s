@@ -255,16 +255,16 @@ debugCapture
 	; store PE0-1 into DataBuffer
 	STR r5, [r0]
 	
-	; increment DataBuffer by #1 for next 8 bits
-	LDR r4, [r0], #1
+	; increment DataBuffer address
+	LDR r4, [r0], #4
 	
-	; increment TimeBuffer by #3 for next 12 bits
-	LDR r4, [r1], #3
+	; increment TimeBuffer address
+	LDR r4, [r1], #4
 	
 	; increment buffer pointer addresses
-	ADD r9, r9, #1
+	ADD r9, r9, #4
 	STR r9, [r2]
-	ADD r10, r10, #3
+	ADD r10, r10, #4
 	STR r10, [r3]
 	
 	; restore any registers saved and return
