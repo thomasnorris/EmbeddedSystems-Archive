@@ -218,24 +218,20 @@ debugCapture
 	; r9 = DataPt value
 	; r3 = TimePt address
 	; r10 = TimePt value
-	; r4 = NVIC_ST_CURRENT_R value
+	; r4 = intermediate value 1
+	; r5 = intermediate value 2
 	
-	; r5 = SWITCH address
-	; r6 = SWITCH value
-	; r7 = LED address
-	; r8 = LED value / LED-SWITCH value
-	
-	; must preserve r0 - r3
-	PUSH {r4, r5, r6, r7, r8, r9, r10, r11}
+	; save intermediate registers
+	PUSH {r4, r5, r9, r10}
 	
 	; compare the value of DataPt and the address of DataBuffer and return if the Buffer is full
 	LDR r9, [r2]
-	CMP r9, r0
+	CMP r0, r9
 	BLT main
 
 	; compare the value of TimePt and the address of TimeBuffer and return if the Buffer is full
 	LDR r10, [r3]
-	CMP r10, r1
+	CMP r1, r10
 	BLT main
 	
 	; get systick value and save in TimeBuffer
@@ -244,20 +240,20 @@ debugCapture
 	STR r4, [r1]
 	
 	; read PE1 and PE0
-	LDR r5, =SWITCH
-	LDR r6, [r5]
-	LDR r7, =LED
-	LDR r8, [r7]
+	LDR r4, =SWITCH
+	LDR r4, [r4]
+	LDR r5, =LED
+	LDR r5, [r5]
 	
 	; shift PE1 1 bit right, then 4 bits left
-	LSR r6, r6, #1
-	LSL r6, r6, #4
+	LSR r4, r4, #1
+	LSL r4, r4, #4
 	
 	; combine PE0 and PE1 into PE0-1
-	ORR r8, r8, r6
+	ORR r5, r5, r4
 	
 	; store PE0-1 into DataBuffer
-	STR r8, [r0]
+	STR r5, [r0]
 	
 	; increment DataBuffer by #1 for next 8 bits
 	LDR r4, [r0], #1
@@ -272,7 +268,7 @@ debugCapture
 	STR r10, [r3]
 	
 	; restore any registers saved and return
-	POP {r4, r5, r6, r7, r8, r9, r10, r11}
+	PUSH {r4, r5, r9, r10}
 
 	BX LR
 
