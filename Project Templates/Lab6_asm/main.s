@@ -95,8 +95,8 @@ Start
 	CPSIE  I    ; TExaS voltmeter, scope runs on interrupts
 
 loop
+	BL heartBeat
 	BL Debug_Capture
-	; TODO: heartbeat
 	
 	; delay by ~62ms
 	BL delay
@@ -114,8 +114,7 @@ loop
 	MOV r0, #0x01
 	STR r0, [r1]
 	
-	;input PE1 test output PE0
-	B    loop
+	B loop
 	
 toggleLed
 	; flip PE0 and write to the register
@@ -148,6 +147,15 @@ innerLoop
 	BNE innerLoop
 
 	B outerLoop
+
+heartBeat
+	; flip PF2 and write to the register
+	LDR r0, =GPIO_PORTF_DATA_R
+	LDR r1, [r0]
+	EOR r1, r1, #0x04
+	STR r1, [r0]
+	
+	BX LR
 
 ;------------Debug_Init------------
 ; Initializes the debugging instrument
