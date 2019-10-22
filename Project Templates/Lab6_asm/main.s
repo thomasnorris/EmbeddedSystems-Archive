@@ -103,12 +103,16 @@ main
 	
 	; heartbeat
 	BL heartbeat
+	
+	; restore r1 and r3
 	POP {r1, r3}
 	
 	; capture PE0 and PE1
 	BL debugCapture
 	
+	; save r1 and r3
 	PUSH {r1, r3}
+	
 	; delay by ~62ms
 	BL delay
 	
@@ -125,6 +129,7 @@ main
 	MOV r0, #0x01
 	STR r0, [r1]
 	
+	; restore r1 and r3
 	POP {r1, r3}
 	
 	B main
@@ -134,6 +139,7 @@ toggleLed
 	EOR r0, r0, #0x01
 	STR r0, [r1]
 	
+	; restore r1 and r3
 	POP {r1, r3}
 	
 	B main
@@ -256,14 +262,16 @@ debugCapture
 	; store PE0-1 into DataBuffer
 	STR r8, [r1]
 	
-	; increment Buffer addresses, reuse r4
-	LDR r4, [r1], #4
-	LDR r4, [r3], #4
+	; increment DataBuffer by #1 for next 8 bits, reuse r4
+	LDR r4, [r1], #1
+	
+	; increment TimeBuffer by #3 for next 12 bits, reuse r4
+	LDR r4, [r3], #3
 	
 	; increment buffer pointer addresses
-	ADD r9, r9, #4
+	ADD r9, r9, #1
 	STR r9, [r0]
-	ADD r10, r10, #4
+	ADD r10, r10, #3
 	STR r10, [r2]
 	
 	; restore any registers saved and return
