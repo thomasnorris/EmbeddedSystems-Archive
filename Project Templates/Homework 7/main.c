@@ -9,6 +9,8 @@
 #include <stdint.h>
 #include "inc/tm4c123gh6pm.h"
 
+extern void SysTick_Init(void);
+
 int main() {
 
 	while(1) {
