@@ -1,14 +1,14 @@
 /*******************************************************************
  * TableTrafficLight.c
- * Instructor: ***fill this in***
+ * Instructor: Gursel Serpen
  * Runs on LM4F120/TM4C123
  * Index implementation of a Moore finite state machine to operate a traffic light.  
  * Authors: Daniel Valvano,
  *					Jonathan Valvano,
  * 					Thomas Royko
- * Student: ***fill this in***
- * Section: ***fill this in***
- * Date:    ***fill this in***
+ * Student: Thomas Norris, Juliette Ulman
+ * Section: 003
+ * Date:    10/26/19
  *
  * east/west red light connected to PB5
  * east/west yellow light connected to PB4
@@ -31,12 +31,12 @@ void EnableInterrupts(void);  // Enable interrupts
 
 int main(void){
 	// activate grader and set system clock to 80 MHz
-  TExaS_Init(SW_PIN_PE210, LED_PIN_PB543210,ScopeOff);
+	TExaS_Init(SW_PIN_PE210, LED_PIN_PB543210,ScopeOff);
  
   
-  EnableInterrupts();
-  while(1){
-     
-  }
+	EnableInterrupts();
+	while(1){
+
+	}
 }
 
