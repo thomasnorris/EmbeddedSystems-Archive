@@ -20,18 +20,19 @@ struct Student {
 unsigned long Grades(struct Student STyp[SIZE]);
 
 int main() {
-	unsigned long grades;
+	unsigned long average;
 	struct Student STyp[SIZE];
-	int j;
-	for (j = 0; j < SIZE; ++j) {
-		STyp[j].id = j;
-		STyp[j].score = 90;
+
+	int i;
+	for (i = 0; i < SIZE; ++i) {
+		STyp[i].id = i;
+		STyp[i].score = 90;
 	}
-	
-	grades = Grades(STyp);
-	
-	// do something with grades
-	
+
+	average = Grades(STyp);
+
+	// do something with average, STyp now has a grade for every Student
+
 	while(1) {
 		// forever
 	}
@@ -39,19 +40,18 @@ int main() {
 
 
 unsigned long Grades(struct Student STyp[SIZE]) {
-	int j;
+	int i;
 	unsigned long sumScores = 0;
-	
-	for (j = 0; j < SIZE; ++j) {
-		struct Student curr = STyp[j];
-		if (curr.score >= 75)
-			curr.grade = 'P';
+
+	for (i = 0; i < SIZE; ++i) {
+		struct Student *curr = &STyp[i];               // get a pointer to the address of the current Student
+		if (curr->score >= 75)                         // if the value is >= 75, grade is updated to 'P', else 'F'
+			curr->grade = 'P';
 		else
-			curr.grade = 'F';
-		
-		sumScores += curr.score;
+			curr->grade = 'F';
+
+		sumScores += curr->score;                      // add the current score to the running total
 	}
-	
-	
-	return sumScores / SIZE;
+
+	return sumScores / SIZE;                           // return the average of the scores
 }
