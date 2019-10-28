@@ -21,10 +21,13 @@ int main() {
 	// initialize SysTick
 	sysTickInit();
 	
+	// wait a desired time in us
+	interruptAfterUs(delayInUs);
+	
+	// do something after the wait
+	
 	while(1) {
-		// wait a desired time in us
-		interruptAfterUs(delayInUs);
-		// do something after the wait
+		// forever
 	}
 }
 
