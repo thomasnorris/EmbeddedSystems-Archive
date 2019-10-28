@@ -9,11 +9,49 @@
 #include <stdint.h>
 #include "inc/tm4c123gh6pm.h"
 
-extern void SysTick_Init(void);
+#define SIZE 64
+
+struct Student {
+	unsigned long id;
+	unsigned long score;
+	unsigned char grade;
+};
+
+unsigned long Grades(struct Student STyp[SIZE]);
 
 int main() {
-
-	while(1) {
-	
+	unsigned long grades;
+	struct Student STyp[SIZE];
+	int j;
+	for (j = 0; j < SIZE; ++j) {
+		STyp[j].id = j;
+		STyp[j].score = 90;
 	}
+	
+	grades = Grades(STyp);
+	
+	// do something with grades
+	
+	while(1) {
+		// forever
+	}
+}
+
+
+unsigned long Grades(struct Student STyp[SIZE]) {
+	int j;
+	unsigned long sumScores = 0;
+	
+	for (j = 0; j < SIZE; ++j) {
+		struct Student curr = STyp[j];
+		if (curr.score >= 75)
+			curr.grade = 'P';
+		else
+			curr.grade = 'F';
+		
+		sumScores += curr.score;
+	}
+	
+	
+	return sumScores / SIZE;
 }
