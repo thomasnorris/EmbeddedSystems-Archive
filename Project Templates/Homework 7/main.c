@@ -3,7 +3,7 @@
 // Last Modified: 10/27/19
 // Lab Section: 003
 // Lab Instructor: Gursel Serpen
-// Homework Number: 7
+// Homework Number: 7 - Question 8
 
 
 #include <stdint.h>
