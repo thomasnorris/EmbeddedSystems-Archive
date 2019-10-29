@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include "inc/tm4c123gh6pm.h"
 
-extern void SysTick_Init(void);
+extern void max4(void);
 
 int main() {
 
