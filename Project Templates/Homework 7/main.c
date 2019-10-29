@@ -13,10 +13,12 @@ extern void removeAllChar(char str[], char toRemove);
 
 // note: str[] is null-terminated by default
 char str[] = "The Quick Brown Fox Jumps Over a Lazy Dog";
+char toRemove = 'o';
 
 int main() {
-	char toRemove = 'o';
 	removeAllChar(str, toRemove);
+	
+	// str should now be less the character toRemove
 	
 	while(1) {
 		// forever
