@@ -9,14 +9,35 @@
 	AREA subroutine, CODE
 	ALIGN
 
-; r0 = *str
-; r1 = char to remove from str
-; r3 will contain the new string before returning in r0
-; note: expecting str to be null-terminated
+; r0 = int1
+; r1 = int2
+; r2 = int3
+; r3 = int4
+; r4 = max
 max4 PROC
 	EXPORT max4
-		
-	BX LR
+	
+	PUSH {r4}       ; need r4, push it
+	
+	MOV r4, #0      ; set max to 0 
+	
+	CMP r0, r4      ; if r0 >= r4, r4 = r0
+	MOVGE r4, r0
+	
+	CMP r1, r4      ; same process until r4 is the max
+	MOVGE r4, r1
+	
+	CMP r2, r4
+	MOVGE r4, r2
+	
+	CMP r3, r4
+	MOVGE r4, r3
+	
+	MOV r0, r4      ; move r4 into r0
+	
+	POP {r4}        ; pop r4
+
+	BX LR           ; return
 	
 	ENDP
 	END
