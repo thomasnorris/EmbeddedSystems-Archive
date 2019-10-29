@@ -9,11 +9,16 @@
 #include <stdint.h>
 #include "inc/tm4c123gh6pm.h"
 
-extern void SysTick_Init(void);
+extern void removeAllChar(char str[], char toRemove);
+
+// note: str[] is null-terminated by default
+char str[] = "The Quick Brown Fox Jumps Over a Lazy Dog";
 
 int main() {
-
-	while(1) {
+	char toRemove = 'o';
+	removeAllChar(str, toRemove);
 	
+	while(1) {
+		// forever
 	}
 }
