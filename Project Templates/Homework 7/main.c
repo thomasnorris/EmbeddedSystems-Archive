@@ -9,11 +9,16 @@
 #include <stdint.h>
 #include "inc/tm4c123gh6pm.h"
 
-extern void SysTick_Init(void);
+char src[25] = "Hello!";
+char dst[25];
+
+extern void strcpy(char dst[25], char src[25]);
 
 int main() {
-
-	while(1) {
 	
+	strcpy(dst, src);
+	
+	while(1) {
+		// forever
 	}
 }
