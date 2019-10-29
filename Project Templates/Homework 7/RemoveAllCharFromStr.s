@@ -4,8 +4,8 @@
 
 ; r0 = *str
 ; r1 = char to remove from str
-; note: expecting str to be null-terminated
 ; r3 will contain the new string before returning in r0
+; note: expecting str to be null-terminated
 removeAllChar PROC
 	EXPORT removeAllChar
 loop
