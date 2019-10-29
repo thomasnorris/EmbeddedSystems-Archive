@@ -9,11 +9,16 @@
 	AREA subroutine, CODE
 	ALIGN
 
-; r0 = 
+; r0 = *str1
+; r1 = *str2
 Swap PROC
 	EXPORT Swap
-loop
 
+	LDR r2, [r0]
+	LDR r3, [r1]
+	STR r2, [r1]
+	STR r3, [r0]
+	
 	BX LR
 	
 	ENDP

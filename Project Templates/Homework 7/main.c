@@ -9,11 +9,18 @@
 #include <stdint.h>
 #include "inc/tm4c123gh6pm.h"
 
-extern void Swap(void);
+char str1[] = "str1";
+char str2[] = "str2";
+
+extern void Swap(char *str1, char *str2);
 
 int main() {
 
-	while(1) {
+	Swap(str1, str2);
 	
+	// str1 now equals str2 and str2 now equals str1
+	
+	while(1) {
+		// forever
 	}
 }
