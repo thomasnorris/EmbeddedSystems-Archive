@@ -24,6 +24,7 @@
  *******************************************************************/
 
 #include "TExaS.h"
+#include <stdbool.h>
 #include "inc\tm4c123gh6pm.h"
 #include "Definitions.c"
 
@@ -40,12 +41,26 @@ void initPortA(void);
 void initPortE(void);
 void initPortF(void);
 
+bool inputPressed(int reg, char pin) {
+	return reg & pin;
+}
+
+void setOutput(int reg, char pin) {
+	GPIO_PORTF_DATA_R = pin;
+}
+
+void disableOutput(int reg, char pin) {
+	reg &= pin;
+}
+
 int main(void){
 	// init everything
 	init();
 	
 	while(1){
-
+		if (inputPressed(PA_IN_DATA_REG, PA4_WALK_IN))
+			setOutput(PF_OUT_DATA_REG, PF3_WALK_GREEN);
+			
 	}
 }
 
@@ -87,7 +102,7 @@ void initPortF() {
 	
 	GPIO_PORTF_LOCK_R = GPIO_LOCK_KEY;
 	GPIO_PORTF_PCTL_R = ZERO;
-	
+	// todo: changes here for led out
 	GPIO_PORTF_DIR_R = PFX_DIR;
 	GPIO_PORTF_DEN_R = PFX_DEN;
 }
