@@ -25,18 +25,76 @@
 
 #include "TExaS.h"
 #include "inc\tm4c123gh6pm.h"
+#include "Definitions.c"
+
+// definitions in Definitions.c
 
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
 
+// initialization
+void init(void);
+extern void SysTick_Init(void);
+void enableClock(char port);
+void initPortA(void);
+void initPortE(void);
+void initPortF(void);
+
 int main(void){
-	// activate grader and set system clock to 80 MHz
-	TExaS_Init(SW_PIN_PE210, LED_PIN_PB543210,ScopeOff);
- 
-  
-	EnableInterrupts();
+	// init everything
+	init();
+	
 	while(1){
 
 	}
 }
 
+void init() {
+	// activate grader and set system clock to 80 MHz
+	TExaS_Init(SW_PIN_PE210, LED_PIN_PB543210, ScopeOff);
+	EnableInterrupts();
+	
+	// SysTick init
+	SysTick_Init();
+	
+	// port init
+	initPortA();
+	initPortE();
+	initPortF();
+}
+
+void initPortA() {
+	enableClock(PA);
+	
+	GPIO_PORTA_LOCK_R = GPIO_LOCK_KEY;
+	GPIO_PORTA_PCTL_R = ZERO;
+	GPIO_PORTA_PUR_R = PAX_PDR;
+	GPIO_PORTA_DIR_R = PAX_DIR;
+	GPIO_PORTA_DEN_R = PAX_DEN;
+}
+
+void initPortE() {
+	enableClock(PE);
+	
+	GPIO_PORTE_LOCK_R = GPIO_LOCK_KEY;
+	GPIO_PORTE_PCTL_R = ZERO;
+	GPIO_PORTE_DIR_R = PEX_DIR;
+	GPIO_PORTE_DEN_R = PEX_DEN;
+}
+
+void initPortF() {
+	enableClock(PF);
+	
+	GPIO_PORTF_LOCK_R = GPIO_LOCK_KEY;
+	GPIO_PORTF_PCTL_R = ZERO;
+	
+	GPIO_PORTF_DIR_R = PFX_DIR;
+	GPIO_PORTF_DEN_R = PFX_DEN;
+}
+
+void enableClock(char port) {
+	SYSCTL_RCGC2_R |= port;
+	while (!(SYSCTL_RCGC2_R & port)) {
+		// wait for clock to become active
+	}
+}
