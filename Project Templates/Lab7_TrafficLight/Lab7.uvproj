@@ -170,7 +170,7 @@
             <Capability>1</Capability>
             <DriverSelection>4097</DriverSelection>
           </Flash1>
-          <bUseTDR>0</bUseTDR>
+          <bUseTDR>1</bUseTDR>
           <Flash2>BIN\lmidk-agdi.dll</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
@@ -414,6 +414,16 @@
               <FileName>TableTrafficLight.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\TableTrafficLight.c</FilePath>
+            </File>
+            <File>
+              <FileName>Definitions.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Definitions.c</FilePath>
+            </File>
+            <File>
+              <FileName>SysTick.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\SysTick.s</FilePath>
             </File>
           </Files>
         </Group>

@@ -28,7 +28,7 @@
 #include "inc\tm4c123gh6pm.h"
 #include "Definitions.c"
 
-// definitions in Definitions.c
+// definitions in Definitions.c for more intuitive naming
 
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
@@ -41,26 +41,20 @@ void initPortA(void);
 void initPortE(void);
 void initPortF(void);
 
-bool inputPressed(int reg, char pin) {
-	return reg & pin;
-}
-
-void setOutput(int reg, char pin) {
-	GPIO_PORTF_DATA_R = pin;
-}
-
-void disableOutput(int reg, char pin) {
-	reg &= pin;
-}
+// pin functions
+bool isInput(char pin);
+void setOutput(volatile uint32_t *reg, int pin, int pinToClear);
 
 int main(void){
-	// init everything
+	// init everything, set default LED colors
 	init();
 	
 	while(1){
-		if (inputPressed(PA_IN_DATA_REG, PA4_WALK_IN))
-			setOutput(PF_OUT_DATA_REG, PF3_WALK_GREEN);
-			
+		// test
+		if (isInput(WALK_IN))
+			setOutput(&PF_DATA, GREEN_WALK, RED_WALK);
+		else
+			setOutput(&PF_DATA, RED_WALK, GREEN_WALK);
 	}
 }
 
@@ -76,6 +70,11 @@ void init() {
 	initPortA();
 	initPortE();
 	initPortF();
+	
+	// default sets all red LEDs
+	setOutput(&PF_DATA, RED_WALK, ZERO);
+	setOutput(&PE_DATA, RED_SOUTH, ZERO);
+	setOutput(&PE_DATA, RED_WEST, ZERO);
 }
 
 void initPortA() {
@@ -102,7 +101,6 @@ void initPortF() {
 	
 	GPIO_PORTF_LOCK_R = GPIO_LOCK_KEY;
 	GPIO_PORTF_PCTL_R = ZERO;
-	// todo: changes here for led out
 	GPIO_PORTF_DIR_R = PFX_DIR;
 	GPIO_PORTF_DEN_R = PFX_DEN;
 }
@@ -112,4 +110,13 @@ void enableClock(char port) {
 	while (!(SYSCTL_RCGC2_R & port)) {
 		// wait for clock to become active
 	}
+}
+
+bool isInput(char pin) {
+	return PA_DATA & pin;
+}
+
+void setOutput(volatile uint32_t *reg, int pinToSet, int pinToClear) {
+	*reg &= ~pinToClear;
+	*reg |= pinToSet;
 }
