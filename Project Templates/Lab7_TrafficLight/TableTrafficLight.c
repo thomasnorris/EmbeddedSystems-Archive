@@ -52,9 +52,9 @@ int main(void){
 	while(1){
 		// test
 		if (isInput(WALK_IN))
-			setOutput(&PF_DATA, GREEN_WALK, RED_WALK);
+			setOutput(&PE_DATA, GREEN_SOUTH, RED_SOUTH);
 		else
-			setOutput(&PF_DATA, RED_WALK, GREEN_WALK);
+			setOutput(&PE_DATA, RED_SOUTH, GREEN_SOUTH);
 	}
 }
 
@@ -80,10 +80,8 @@ void init() {
 void initPortA() {
 	enableClock(PA);
 	
-	GPIO_PORTA_LOCK_R = GPIO_LOCK_KEY;
-	GPIO_PORTA_PCTL_R = ZERO;
-	GPIO_PORTA_PUR_R = PAX_PDR;
-	GPIO_PORTA_DIR_R = PAX_DIR;
+	GPIO_PORTA_PDR_R = PAX_PDR;
+	GPIO_PORTA_DIR_R = ~PAX_DIR;
 	GPIO_PORTA_DEN_R = PAX_DEN;
 }
 
