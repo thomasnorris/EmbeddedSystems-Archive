@@ -74,7 +74,7 @@ int main(void){
 	
 	while(1){
 		setOutput(currentState.Register, currentState.Out);
-		//wait(currentState.Time);
+		wait(currentState.Time);
 		currentState = FSM[currentState.Next[getNextInputIndex()]];
 	}
 }

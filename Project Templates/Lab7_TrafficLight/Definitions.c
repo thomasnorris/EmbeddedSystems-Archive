@@ -1,10 +1,8 @@
 
 #include "inc\tm4c123gh6pm.h"
 
-// general conveniences
-#define ZERO 0x00
-#define TRUE 1
-#define FALSE 0
+// Note: Not all of these are used, however they are here for easily determining
+//       what goes where.
 
 // PFX pins OUTPUT - Walk LEDs
 #define GREEN_WALK 0x08                 // PF3
