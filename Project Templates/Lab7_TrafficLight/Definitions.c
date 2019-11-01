@@ -4,6 +4,11 @@
 // Note: Not all of these are used, however they are here for easily determining
 //       what goes where.
 
+// general conveniences
+#define ZERO 0x00
+#define TRUE 1
+#define FALSE 0
+
 // PFX pins OUTPUT - Walk LEDs
 #define GREEN_WALK 0x08                 // PF3
 #define RED_WALK 0x02                   // PF1

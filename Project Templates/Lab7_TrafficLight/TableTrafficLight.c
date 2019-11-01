@@ -10,11 +10,10 @@
  * Section: 003
  * Date:    10/26/19
  *
- * see Definitions.c for pin connections
+ * see Definitions.c for definitions
  *******************************************************************/
 
 #include "TExaS.h"
-#include <stdbool.h>
 #include "inc\tm4c123gh6pm.h"
 #include "Definitions.c"
 
