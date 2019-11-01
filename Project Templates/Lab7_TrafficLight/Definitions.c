@@ -38,3 +38,15 @@
 #define PAX_DEN 0x1C                    // PA2 - PA4
 #define PAX_PDR 0x1C                    // PA2 - PA4
 #define PA_DATA GPIO_PORTA_DATA_R
+
+// PEX State Outputs
+#define GO_S_OUT_PE 0x0C
+#define WAIT_S_OUT_PE 0x14
+#define GO_W_OUT_PE 0x21
+#define WAIT_W_OUT_PE 0x22
+
+// PFX State Outputs
+#define WALK_P_OUT_PF 0x08
+#define WARNING_P_OFF_OUT_PF 0x00
+#define WARNING_P_ON_OUT_PF 0x02
+#define NO_WALK_P_OUT_PF 0x02
