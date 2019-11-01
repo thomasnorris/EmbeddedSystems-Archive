@@ -27,7 +27,7 @@ extern void SysTick_Wait(uint32_t cycles);
 void wait(int ms);
 
 // initialization
-void init(void);
+void initAll(void);
 void initPortA(void);
 void initPortE(void);
 void initPortF(void);
@@ -67,9 +67,9 @@ struct State FSM[15] = {
 
 int main(void){
 	struct State currentState = FSM[goS];
-	uint32_t input;
+	
 	// init everything
-	init();
+	initAll();
 	
 	while(1){
 		setOutput(currentState.Register, currentState.Out);
@@ -78,7 +78,7 @@ int main(void){
 	}
 }
 
-void init() {
+void initAll() {
 	// activate grader and set system clock to 80 MHz
 	TExaS_Init(SW_PIN_PE210, LED_PIN_PB543210, ScopeOff);
 	EnableInterrupts();
