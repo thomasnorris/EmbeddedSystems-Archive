@@ -33,6 +33,8 @@
 #define SOUTH_IN 0x08                   // PA3
 #define WEST_IN 0x04                    // PA2
 
+#define ALL_INPUTS 0x1C
+
 #define PA 0x01
 #define PAX_DIR 0x1C                    // PA2 - PA4
 #define PAX_DEN 0x1C                    // PA2 - PA4
@@ -40,18 +42,18 @@
 #define PA_DATA GPIO_PORTA_DATA_R
 
 // PEX State Outputs
-#define GO_S_OUT_PE 0x0C
-#define WAIT_S_OUT_PE 0x14
-#define GO_W_OUT_PE 0x21
-#define WAIT_W_OUT_PE 0x22
-#define STOP_ALL_OUT_PE 0x24
-#define CHECK_PX_OUT_PE 0x24            // checkP1, P2
+#define GO_S_OUT 0x0C
+#define WAIT_S_OUT 0x14
+#define GO_W_OUT 0x21
+#define WAIT_W_OUT 0x22
+#define STOP_ALL_OUT 0x24
+#define CHECK_PX_OUT 0x24            // checkP1, P2
 
 // PFX State Outputs
-#define WALK_P_OUT_PF 0x08
-#define WARNING_PX_OFF_OUT_PF 0x00      // warningP1Off, warningP2Off, etc
-#define WARNING_PX_ON_OUT_PF 0x02       // warningP1On, warningP2On, etc
-#define NO_WALK_P_OUT_PF 0x02
+#define WALK_P_OUT 0x08
+#define WARNING_PX_OFF_OUT 0x00      // warningP1Off, warningP2Off, etc
+#define WARNING_PX_ON_OUT 0x02       // warningP1On, warningP2On, etc
+#define NO_WALK_P_OUT 0x02
 
 // State indicies
 #define goS 0
@@ -68,4 +70,13 @@
 #define warningP2On 11
 #define warningP3Off 12
 #define warningP3On 13
-#define noWalkP 14
+#define warningP4Off 14
+#define noWalkP 15
+
+// Time (ms)
+#define GO_MS 500
+#define WAIT_MS 2000
+#define CHECK_MS 1000
+#define STOP_MS 2000
+#define WALK_MS 15000
+#define WARNING_MS 500

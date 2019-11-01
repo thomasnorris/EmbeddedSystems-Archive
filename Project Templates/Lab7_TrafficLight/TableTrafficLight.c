@@ -35,32 +35,47 @@ void initPortF(void);
 void enableClock(char port);
 
 // pin functions
-bool isInput(char pin);
-void setOutput(volatile uint32_t *reg, int pin, int pinToClear);
+uint32_t getNextInputIndex(void);
+void setOutput(volatile uint32_t *reg, uint32_t data);
 
 struct State {
 	uint32_t Out;
+	volatile uint32_t *Register;
 	uint32_t Time; // 1 ms units
 	uint32_t Next[8];
 };
 
 
 struct State FSM[15] = {
-	{}
+	{GO_S_OUT, &PE_DATA, GO_MS, {goS, waitS, goS, waitS, waitS, waitS, waitS, waitS}},
+	{WAIT_S_OUT, &PE_DATA, WAIT_MS, {goW, goW, goW, goW, checkP1, checkP1, checkP1, checkP1}},
+	{GO_W_OUT, &PE_DATA, GO_MS, {goW, goW, waitW, waitW, waitW, waitW, waitW, waitW}},
+	{WAIT_W_OUT, &PE_DATA, WAIT_MS, {goS, goS, goS, goS, checkP1, checkP1, checkP1, checkP1}},
+	{CHECK_PX_OUT, &PE_DATA, CHECK_MS, {goS, goS, goS, goS, checkP2, checkP2, checkP2, checkP2}},
+	{CHECK_PX_OUT, &PE_DATA, CHECK_MS, {goS, goS, goS, goS, stopAll, stopAll, stopAll, stopAll}},
+	{STOP_ALL_OUT, &PE_DATA, STOP_MS, {walkP, walkP, walkP, walkP, walkP, walkP, walkP, walkP}},
+	{WALK_P_OUT, &PF_DATA, WAIT_MS, {warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off}},
+	{WARNING_PX_OFF_OUT, &PF_DATA, WARNING_MS, {warningP1On, warningP1On, warningP1On, warningP1On, warningP1On, warningP1On, warningP1On, warningP1On}},
+	{WARNING_PX_ON_OUT, &PF_DATA, WARNING_MS, {warningP2Off, warningP2Off, warningP2Off, warningP2Off, warningP2Off, warningP2Off, warningP2Off, warningP2Off}},
+	{WARNING_PX_OFF_OUT, &PF_DATA, WARNING_MS, {warningP2On, warningP2On, warningP2On, warningP2On, warningP2On, warningP2On, warningP2On, warningP2On}},
+	{WARNING_PX_ON_OUT, &PF_DATA, WARNING_MS, {warningP3Off, warningP3Off, warningP3Off, warningP3Off, warningP3Off, warningP3Off, warningP3Off, warningP3Off}},
+	{WARNING_PX_OFF_OUT, &PF_DATA, WARNING_MS, {warningP3On, warningP3On, warningP3On, warningP3On, warningP3On, warningP3On, warningP3On, warningP3On}},
+	{WARNING_PX_ON_OUT, &PF_DATA, WARNING_MS, {warningP4Off, warningP4Off, warningP4Off, warningP4Off, warningP4Off, warningP4Off, warningP4Off, warningP4Off}},
+	{NO_WALK_P_OUT, &PF_DATA, WAIT_MS, {goS, goW, goS, goW, checkP1, goW, goS, goW}}
 };
 
 
-int main(void){
-	// init everything, set default LED colors
-	init();
 
+int main(void){
+	struct State currentState = FSM[goS];
+	uint32_t input;
+	// init everything
+	init();
+	
 	while(1){
-		wait(1000);
-		// test
-		if (isInput(WALK_IN))
-			setOutput(&PE_DATA, GREEN_SOUTH, RED_SOUTH);
-		else
-			setOutput(&PE_DATA, RED_SOUTH, GREEN_SOUTH);
+		setOutput(currentState.Register, currentState.Out);
+		//wait(currentState.Time);
+		currentState = FSM[currentState.Next[getNextInputIndex()]];
 	}
 }
 
@@ -76,11 +91,6 @@ void init() {
 	initPortA();
 	initPortE();
 	initPortF();
-
-	// default sets all red LEDs
-	setOutput(&PF_DATA, RED_WALK, ZERO);
-	setOutput(&PE_DATA, RED_SOUTH, ZERO);
-	setOutput(&PE_DATA, RED_WEST, ZERO);
 }
 
 void initPortA() {
@@ -116,13 +126,28 @@ void enableClock(char port) {
 	}
 }
 
-bool isInput(char pin) {
-	return PA_DATA & pin;
+uint32_t getNextInputIndex() {
+	switch (PA_DATA & ALL_INPUTS) {
+		case 0x04:
+			return 1;
+		case 0x08:
+			return 2;
+		case 0x0C:
+			return 3;
+		case 0x10:
+			return 4;
+		case 0x14:
+			return 5;
+		case 0x18:
+			return 6;
+		case 0x1C:
+			return 7;
+	}
+	return 0;
 }
 
-void setOutput(volatile uint32_t *reg, int pinToSet, int pinToClear) {
-	*reg &= ~pinToClear;
-	*reg |= pinToSet;
+void setOutput(volatile uint32_t *reg, uint32_t data) {
+	*reg = data;
 }
 
 void wait(int ms) {
