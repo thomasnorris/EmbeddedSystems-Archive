@@ -44,9 +44,23 @@
 #define WAIT_S_OUT_PE 0x14
 #define GO_W_OUT_PE 0x21
 #define WAIT_W_OUT_PE 0x22
+#define STOP_ALL_OUT_PE 0x24
+#define CHECK_P_OUT_PE 0x24
 
 // PFX State Outputs
 #define WALK_P_OUT_PF 0x08
 #define WARNING_P_OFF_OUT_PF 0x00
 #define WARNING_P_ON_OUT_PF 0x02
 #define NO_WALK_P_OUT_PF 0x02
+
+// State indicies
+#define goS 0
+#define waitS 1
+#define goW 2
+#define waitW 3
+#define stopAll 4
+#define checkP 5
+#define walkP 6
+#define warningPOff 7
+#define warningPOn 8
+#define noWalkP 9
