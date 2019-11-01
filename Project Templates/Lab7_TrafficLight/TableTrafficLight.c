@@ -18,26 +18,44 @@
 #include "inc\tm4c123gh6pm.h"
 #include "Definitions.c"
 
-void DisableInterrupts(void); // Disable interrupts
-void EnableInterrupts(void);  // Enable interrupts
+// interrupt control
+void DisableInterrupts(void);
+void EnableInterrupts(void);
+
+// SysTick
+extern void SysTick_Init(void);
+extern void SysTick_Wait(uint32_t cycles);
+void wait(int ms);
 
 // initialization
 void init(void);
-extern void SysTick_Init(void);
-void enableClock(char port);
 void initPortA(void);
 void initPortE(void);
 void initPortF(void);
+void enableClock(char port);
 
 // pin functions
 bool isInput(char pin);
 void setOutput(volatile uint32_t *reg, int pin, int pinToClear);
+
+struct State {
+	uint32_t Out;
+	uint32_t Time; // 1 ms units
+	uint32_t Next[8];
+};
+
+/*
+struct State FSM[10] = {
+	{}
+};
+*/
 
 int main(void){
 	// init everything, set default LED colors
 	init();
 
 	while(1){
+		wait(1000);
 		// test
 		if (isInput(WALK_IN))
 			setOutput(&PE_DATA, GREEN_SOUTH, RED_SOUTH);
@@ -105,4 +123,10 @@ bool isInput(char pin) {
 void setOutput(volatile uint32_t *reg, int pinToSet, int pinToClear) {
 	*reg &= ~pinToClear;
 	*reg |= pinToSet;
+}
+
+void wait(int ms) {
+	int cyclesPerMs = 80000;   // assuming 80MHz clock, 12.5 ns
+	int totalCycles = ms * cyclesPerMs;
+	SysTick_Wait(totalCycles);
 }
