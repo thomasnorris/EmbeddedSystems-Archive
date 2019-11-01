@@ -44,11 +44,11 @@ struct State {
 	uint32_t Next[8];
 };
 
-/*
-struct State FSM[10] = {
+
+struct State FSM[15] = {
 	{}
 };
-*/
+
 
 int main(void){
 	// init everything, set default LED colors
