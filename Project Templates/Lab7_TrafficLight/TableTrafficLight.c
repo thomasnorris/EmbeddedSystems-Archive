@@ -50,12 +50,12 @@ struct State FSM[22] = {
 	{WAIT_SX_OUT, PE_DATA, WAIT_MS, {goW, goW, goW, goW, goW, goW, goW, goW}},
 	{GO_W_OUT, PE_DATA, GO_MS, {goW, goW, waitW1, waitW1, checkP1W, checkP1W, checkP1W, checkP1W}},
 	{WAIT_WX_OUT, PE_DATA, WAIT_MS, {goS, goS, goS, goS, goS, goS, goS, goS}},
-	{CHECK_P1S_OUT, PE_DATA, CHECK_MS, {goS, goS, goS, goS, checkP2S, checkP2S, checkP2S, checkP2S}},
-	{CHECK_P2S_OUT, PE_DATA, CHECK_MS, {goS, goS, goS, goS, waitS2, waitS2, waitS2, waitS2}},
+	{CHECK_PXS_OUT, PE_DATA, CHECK_MS, {goS, goS, goS, goS, checkP2S, checkP2S, checkP2S, checkP2S}},
+	{CHECK_PXS_OUT, PE_DATA, CHECK_MS, {goS, goS, goS, goS, waitS2, waitS2, waitS2, waitS2}},
 	{WAIT_SX_OUT, PE_DATA, WAIT_MS, {haltSW, haltSW, haltSW, haltSW, haltSW, haltSW, haltSW, haltSW}},
 	{HALT_SW_OUT, PE_DATA, WAIT_MS, {walkP, walkP, walkP, walkP, walkP, walkP, walkP, walkP}},
-	{CHECK_P1W_OUT, PE_DATA, CHECK_MS, {goW, goW, goW, goW, checkP2W, checkP2W, checkP2W, checkP2W}},
-	{CHECK_P2W_OUT, PE_DATA, CHECK_MS, {goW, goW, goW, goW, waitW2, waitW2, waitW2, waitW2}},
+	{CHECK_PXW_OUT, PE_DATA, CHECK_MS, {goW, goW, goW, goW, checkP2W, checkP2W, checkP2W, checkP2W}},
+	{CHECK_PXW_OUT, PE_DATA, CHECK_MS, {goW, goW, goW, goW, waitW2, waitW2, waitW2, waitW2}},
 	{WAIT_WX_OUT, PE_DATA, WAIT_MS, {haltSW, haltSW, haltSW, haltSW, haltSW, haltSW, haltSW, haltSW}},
 	{WALK_P_OUT, PF_DATA, WALK_MS, {warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off}},
 	{WARNING_PX_OFF_OUT, PF_DATA, WARNING_MS, {warningP1On, warningP1On, warningP1On, warningP1On, warningP1On, warningP1On, warningP1On, warningP1On}},
@@ -67,6 +67,7 @@ struct State FSM[22] = {
 	{WARNING_PX_OFF_OUT, PF_DATA, WARNING_MS, {noWalkP, noWalkP, noWalkP, noWalkP, noWalkP, noWalkP, noWalkP, noWalkP}},
 	{NO_WALK_P_OUT, PF_DATA, WAIT_MS, {goS, goW, goS, goS, goS, goW, goS, goS}}
 };
+
 
 
 int main(void){

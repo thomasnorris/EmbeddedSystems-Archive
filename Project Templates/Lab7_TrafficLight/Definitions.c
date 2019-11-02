@@ -51,10 +51,10 @@
 #define GO_W_OUT 0x21
 #define WAIT_WX_OUT 0x22                // waitW1, waitW2
 #define HALT_SW_OUT 0x24
-#define CHECK_P1S_OUT 0x0C
-#define CHECK_P2S_OUT 0x0C
-#define CHECK_P1W_OUT 0x21
-#define CHECK_P2W_OUT 0x21
+#define CHECK_PXS_OUT 0x0C
+#define CHECK_PXS_OUT 0x0C
+#define CHECK_PXW_OUT 0x21
+#define CHECK_PXW_OUT 0x21
 
 // PFX State Outputs
 #define INIT_P_OUT 0x02                 // turn no walk LED on
