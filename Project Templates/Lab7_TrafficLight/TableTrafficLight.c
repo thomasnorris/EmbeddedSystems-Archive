@@ -44,25 +44,28 @@ struct State {
 	uint32_t Next[8];
 };
 
-
-struct State FSM[15] = {
-	{GO_S_OUT, &PE_DATA, GO_MS, {goS, waitS, goS, waitS, waitS, waitS, waitS, waitS}},
-	{WAIT_S_OUT, &PE_DATA, WAIT_MS, {goW, goW, goW, goW, checkP1, checkP1, checkP1, checkP1}},
-	{GO_W_OUT, &PE_DATA, GO_MS, {goW, goW, waitW, waitW, waitW, waitW, waitW, waitW}},
-	{WAIT_W_OUT, &PE_DATA, WAIT_MS, {goS, goS, goS, goS, checkP1, checkP1, checkP1, checkP1}},
-	{CHECK_PX_OUT, &PE_DATA, CHECK_MS, {goS, goS, goS, goS, checkP2, checkP2, checkP2, checkP2}},
-	{CHECK_PX_OUT, &PE_DATA, CHECK_MS, {goS, goS, goS, goS, stopAll, stopAll, stopAll, stopAll}},
-	{STOP_ALL_OUT, &PE_DATA, STOP_MS, {walkP, walkP, walkP, walkP, walkP, walkP, walkP, walkP}},
-	{WALK_P_OUT, &PF_DATA, WAIT_MS, {warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off}},
-	{WARNING_PX_OFF_OUT, &PF_DATA, WARNING_MS, {warningP1On, warningP1On, warningP1On, warningP1On, warningP1On, warningP1On, warningP1On, warningP1On}},
-	{WARNING_PX_ON_OUT, &PF_DATA, WARNING_MS, {warningP2Off, warningP2Off, warningP2Off, warningP2Off, warningP2Off, warningP2Off, warningP2Off, warningP2Off}},
-	{WARNING_PX_OFF_OUT, &PF_DATA, WARNING_MS, {warningP2On, warningP2On, warningP2On, warningP2On, warningP2On, warningP2On, warningP2On, warningP2On}},
-	{WARNING_PX_ON_OUT, &PF_DATA, WARNING_MS, {warningP3Off, warningP3Off, warningP3Off, warningP3Off, warningP3Off, warningP3Off, warningP3Off, warningP3Off}},
-	{WARNING_PX_OFF_OUT, &PF_DATA, WARNING_MS, {warningP3On, warningP3On, warningP3On, warningP3On, warningP3On, warningP3On, warningP3On, warningP3On}},
-	{WARNING_PX_ON_OUT, &PF_DATA, WARNING_MS, {warningP4Off, warningP4Off, warningP4Off, warningP4Off, warningP4Off, warningP4Off, warningP4Off, warningP4Off}},
-	{NO_WALK_P_OUT, &PF_DATA, WAIT_MS, {goS, goW, goS, goW, checkP1, goW, goS, goW}}
+struct State FSM[20] = {
+	{GO_S_OUT, PE_DATA, GO_MS, {goS, waitS1, goS, waitS1, checkP1S, checkP1S, checkP1S,checkP1S}},
+	{WAIT_SX_OUT, PE_DATA, WAIT_MS, {goW, goW, goW, goW, goW, goW, goW, goW}},
+	{GO_W_OUT, PE_DATA, GO_MS, {goW, goW, waitW1, waitW1, checkP1W, checkP1W, checkP1W, checkP1W}},
+	{WAIT_WX_OUT, PE_DATA, WAIT_MS, {goS, goS, goS, goS, goS, goS, goS, goS}},
+	{CHECK_P1S_OUT, PE_DATA, CHECK_MS, {goS, goS, goS, goS, checkP2S, checkP2S, checkP2S, checkP2S}},
+	{CHECK_P2S_OUT, PE_DATA, CHECK_MS, {goW, goW, goW, goW, waitW2, waitW1, waitW2, waitW2}},
+	{WAIT_SX_OUT, PE_DATA, WAIT_MS, {haltSW, haltSW, haltSW, haltSW, haltSW, haltSW, haltSW, haltSW}},
+	{HALT_SW_OUT, PE_DATA, WAIT_MS, {walkP, walkP, walkP, walkP, walkP, walkP, walkP, walkP}},
+	{CHECK_P1W_OUT, PE_DATA, CHECK_MS, {goW, goW, goW, goW, checkP2W, checkP2W, checkP2W, checkP2W}},
+	{CHECK_P2W_OUT, PE_DATA, CHECK_MS, {goW, goW, goW, goW, haltSW, haltSW, haltSW, haltSW}},
+	{WAIT_WX_OUT, PE_DATA, WAIT_MS, {haltSW, haltSW, haltSW, haltSW, haltSW, haltSW, haltSW, haltSW}},
+	{WALK_P_OUT, PF_DATA, WAIT_MS, {warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off, warningP1Off}},
+	{WARNING_PX_OFF_OUT, PF_DATA, WARNING_MS, {warningP1On, warningP1On, warningP1On, warningP1On, warningP1On, warningP1On, warningP1On, warningP1On}},
+	{WARNING_PX_ON_OUT, PF_DATA, WARNING_MS, {warningP2Off, warningP2Off, warningP2Off, warningP2Off, warningP2Off, warningP2Off, warningP2Off, warningP2Off}},
+	{WARNING_PX_OFF_OUT, PF_DATA, WARNING_MS, {warningP2On, warningP2On, warningP2On, warningP2On, warningP2On, warningP2On, warningP2On, warningP2On}},
+	{WARNING_PX_ON_OUT, PF_DATA, WARNING_MS, {warningP3Off, warningP3Off, warningP3Off, warningP3Off, warningP3Off, warningP3Off, warningP3Off, warningP3Off}},
+	{WARNING_PX_OFF_OUT, PF_DATA, WARNING_MS, {warningP3On, warningP3On, warningP3On, warningP3On, warningP3On, warningP3On, warningP3On, warningP3On}},
+	{WARNING_PX_ON_OUT, PF_DATA, WARNING_MS, {warningP4Off, warningP4Off, warningP4Off, warningP4Off, warningP4Off, warningP4Off, warningP4Off, warningP4Off}},
+	{WARNING_PX_OFF_OUT, PF_DATA, WARNING_MS, {noWalkP, noWalkP, noWalkP, noWalkP, noWalkP, noWalkP, noWalkP, noWalkP}},
+	{NO_WALK_P_OUT, PF_DATA, WAIT_MS, {goS, goW, goS, goS, goS, goW, goS, goS}}
 };
-
 
 
 int main(void){
@@ -126,7 +129,7 @@ void enableClock(char port) {
 }
 
 uint32_t getNextInputIndex() {
-	switch (PA_DATA & ALL_INPUTS) {
+	switch (*PA_DATA & ALL_INPUTS) {
 		case 0x04:
 			return 1;
 		case 0x08:
