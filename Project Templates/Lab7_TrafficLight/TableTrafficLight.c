@@ -32,8 +32,8 @@ void initPortE(void);
 void initPortF(void);
 void enableClock(char port);
 
-// pin functions
-uint32_t getNextInputIndex(void);
+// I/O functions
+char getNextInputIndex(void);
 void setOutput(volatile uint32_t *reg, uint32_t data);
 
 struct State {
@@ -68,9 +68,8 @@ struct State FSM[22] = {
 	{NO_WALK_P_OUT, PF_DATA, WAIT_MS, {goS, goW, goS, goS, goS, goW, goS, goS}}
 };
 
-
-
 int main(void){
+	// get initial state
 	struct State currentState = FSM[initSW];
 	
 	// activate grader and set system clock to 80 MHz
@@ -85,9 +84,15 @@ int main(void){
 	initPortE();
 	initPortF();
 	
+	// FSM
 	while(1){
+		// set the output to the corresponding register
 		setOutput(currentState.Register, currentState.Out);
+		
+		// wait
 		wait(currentState.Time);
+		
+		// get the next state and reassign based on the input
 		currentState = FSM[currentState.Next[getNextInputIndex()]];
 	}
 }
@@ -95,54 +100,42 @@ int main(void){
 void initPortA() {
 	enableClock(PA);
 
-	GPIO_PORTA_PDR_R = PAX_PDR;
-	GPIO_PORTA_DIR_R = ~PAX_DIR;
-	GPIO_PORTA_DEN_R = PAX_DEN;
+	GPIO_PORTA_PDR_R = PAX_PDR;                  // enable PDRs
+	GPIO_PORTA_DIR_R = ~PAX_DIR;                 // set input direction
+	GPIO_PORTA_DEN_R = PAX_DEN;                  // digital enable
 }
 
 void initPortE() {
 	enableClock(PE);
 
-	GPIO_PORTE_LOCK_R = GPIO_LOCK_KEY;
-	GPIO_PORTE_PCTL_R = ZERO;
-	GPIO_PORTE_DIR_R = PEX_DIR;
-	GPIO_PORTE_DEN_R = PEX_DEN;
+	GPIO_PORTE_LOCK_R = GPIO_LOCK_KEY;           // unlock the port
+	GPIO_PORTE_PCTL_R = ZERO;                    // clear PCTL
+	GPIO_PORTE_DIR_R = PEX_DIR;                  // set output direction
+	GPIO_PORTE_DEN_R = PEX_DEN;                  // digital enable
 }
 
 void initPortF() {
 	enableClock(PF);
 
-	GPIO_PORTF_LOCK_R = GPIO_LOCK_KEY;
-	GPIO_PORTF_PCTL_R = ZERO;
-	GPIO_PORTF_DIR_R = PFX_DIR;
-	GPIO_PORTF_DEN_R = PFX_DEN;
+	GPIO_PORTF_LOCK_R = GPIO_LOCK_KEY;           // unlock the port
+	GPIO_PORTF_PCTL_R = ZERO;                    // clear PCTL
+	GPIO_PORTF_DIR_R = PFX_DIR;                  // set output direction
+	GPIO_PORTF_DEN_R = PFX_DEN;                  // digital enable
 }
 
 void enableClock(char port) {
-	SYSCTL_RCGC2_R |= port;
+	SYSCTL_RCGC2_R |= port;                      // enable the clock
 	while (!(SYSCTL_RCGC2_R & port)) {
 		// wait for clock to become active
 	}
 }
 
-uint32_t getNextInputIndex() {
-	switch (*PA_DATA & ALL_INPUTS) {
-		case 0x04:
-			return 1;
-		case 0x08:
-			return 2;
-		case 0x0C:
-			return 3;
-		case 0x10:
-			return 4;
-		case 0x14:
-			return 5;
-		case 0x18:
-			return 6;
-		case 0x1C:
-			return 7;
-	}
-	return 0;
+char getNextInputIndex() {
+	char westIn = (*PA_DATA & WEST_IN) >> 2;    // shift from 0x04 to 0x01
+	char southIn = (*PA_DATA & SOUTH_IN) >> 2;  // shift from 0x08 to 0x02
+	char walkIn = (*PA_DATA & WALK_IN) >> 2;    // shift from 0x10 to 0x04
+	
+	return westIn | southIn | walkIn;           // bitwise OR to get a value between 0 and 7
 }
 
 void setOutput(volatile uint32_t *reg, uint32_t data) {
@@ -150,10 +143,9 @@ void setOutput(volatile uint32_t *reg, uint32_t data) {
 }
 
 void wait(int ms) {
-	int cyclesPerMs = 80000;   // assuming 80MHz clock, 12.5 ns
+	int cyclesPerMs = 80000;                    // assuming 80MHz clock, 12.5 ns
 	int i;
 	for (i = 0; i < ms; ++i){
-		SysTick_Wait(cyclesPerMs);
+		SysTick_Wait(cyclesPerMs);              // wait 1 ms per loop
 	}
-	
 }
