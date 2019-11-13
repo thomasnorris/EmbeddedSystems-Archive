@@ -17,11 +17,26 @@
 #include "..//inc//tm4c123gh6pm.h"
 
 // **************DAC_Init*********************
-// Initialize 4-bit DAC outputs
+// Initialize 4-bit DAC outputs (PB0 - PB3)
 // Input: none
 // Output: none
 void DAC_Init(void){
-
+	char PB = 0x02;
+	char PBX_DIR = 0x0F;
+	char PBX_DEN = 0x0F;
+	char ZERO = 0x00;
+	
+	SYSCTL_RCGC2_R |= PB;
+	
+	while (!(SYSCTL_RCGC2_R & PB)) {
+		// wait for clock to become active
+	}
+	
+	// unlock, set directions and enable
+	GPIO_PORTB_LOCK_R = GPIO_LOCK_KEY;
+	GPIO_PORTB_PCTL_R = ZERO;
+	GPIO_PORTB_DIR_R |= PBX_DIR;
+	GPIO_PORTB_DEN_R |= PBX_DEN;
 }
 
 

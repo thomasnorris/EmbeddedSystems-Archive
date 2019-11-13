@@ -32,7 +32,7 @@ void Piano_Init(void){
 		// wait for clock to become active
 	}
 	
-	// unlock, set directions and PDRs
+	// unlock, set directions, PDRs, and enable
 	GPIO_PORTE_LOCK_R = GPIO_LOCK_KEY;
 	GPIO_PORTE_PDR_R |= PEX_PDR;
 	GPIO_PORTE_DIR_R &= PEX_DIR;
