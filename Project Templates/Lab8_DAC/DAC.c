@@ -17,7 +17,7 @@
 #include "..//inc//tm4c123gh6pm.h"
 
 // **************DAC_Init*********************
-// Initialize 4-bit DAC 
+// Initialize 4-bit DAC outputs
 // Input: none
 // Output: none
 void DAC_Init(void){

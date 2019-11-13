@@ -11,7 +11,7 @@
  * Date:    11/13/19
  *
  * Port B bits 3-0 have the 4-bit DAC
- * Port E bits 3-0 have 4 piano keys
+ * Port E bits 2-0 have 3 piano keys
  *******************************************************************/
 
 #include "../inc/tm4c123gh6pm.h"
