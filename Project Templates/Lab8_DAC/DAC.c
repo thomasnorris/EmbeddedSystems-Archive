@@ -1,14 +1,14 @@
 /*******************************************************************
  * DAC.c
- * Instructor: ***fill this in***
+ * Instructor: Gursel Serpen
  * Runs on TM4C123
  * Implementation of the 4-bit digital to analog converter
  * Authors: Daniel Valvano,
  *					Jonathan Valvano,
  * 					Thomas Royko
- * Student: ***fill this in***
- * Section: ***fill this in***
- * Date:    ***fill this in***
+ * Student: Thomas Norris / Juliette Ulman
+ * Section: 003
+ * Date:    11/13/19
  *
  * Port B bits 3-0 have the 4-bit DAC
  *******************************************************************/

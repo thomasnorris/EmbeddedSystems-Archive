@@ -1,14 +1,14 @@
 /*******************************************************************
  * Sound.c
- * Instructor: ***fill this in***
+ * Instructor: Gursel Serpen
  * Runs on TM4C123
  * Use the SysTick timer to request interrupts at a particular period.
  * Authors: Daniel Valvano,
  *					Jonathan Valvano,
  * 					Thomas Royko
- * Student: ***fill this in***
- * Section: ***fill this in***
- * Date:    ***fill this in***
+ * Student: Thomas Norris / Juliette Ulman
+ * Section: 003
+ * Date:    11/13/19
  *
  * This module calls the 4-bit DAC
  *******************************************************************/
