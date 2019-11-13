@@ -24,8 +24,7 @@ void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
 void delay(unsigned long msec);
 
-
-int main(void){ // Real Lab13 
+int main(void){
 	// for the real board grader to work 
 	// you must connect PD3 to your DAC output
 	// activate grader and set system clock to 80 MHz

@@ -2,7 +2,7 @@
  * piano.c
  * Instructor: Gursel Serpen
  * Runs on TM4C123
- * There are four keys in the piano
+ * There are three keys in the piano
  * Authors: Daniel Valvano,
  * 					Thomas Royko
  * Student: Thomas Norris / Juliette Ulman
@@ -15,7 +15,11 @@
 #include "Piano.h"
 #include "..//inc//tm4c123gh6pm.h"
 
-
+// Notes C, E, G
+const int key0ToneHz = 262;
+const int key1ToneHz = 330; 
+const int key2ToneHz = 392;
+	
 // **************Piano_Init*********************
 // Initialize piano key inputs (PE0 - PE2)
 // Input: none
@@ -40,12 +44,19 @@ void Piano_Init(void){
 }
 
 // **************Piano_In*********************
-// Input from piano key inputs
+// Input from piano key inputs. Only one key will be pressed at a time
 // Input: none 
-// Output: 0 to 15 depending on keys
-// 0x01 is key 0 pressed, 0x02 is key 1 pressed,
-// 0x04 is key 2 pressed, 0x08 is key 3 pressed
-unsigned long Piano_In(void){
+// Output: 0x01, 0x02, or 0x04
+// 0x01 is key 0, 0x02 is key 1,
+// 0x04 is key 2
+unsigned long Piano_In(void) {
+	// todo: this
+	if (GPIO_PORTE_DATA_R & 0x01)
+		return 0x01;
+	if (GPIO_PORTE_DATA_R & 0x02)
+		return 0x02;
+	if (GPIO_PORTE_DATA_R & 0x04)
+		return 0x04;
 	
-	return 0; // remove this, replace with input
+	return 0;
 }

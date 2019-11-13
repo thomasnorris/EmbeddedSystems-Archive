@@ -45,5 +45,5 @@ void DAC_Init(void){
 // Input: 4-bit data, 0 to 15 
 // Output: none
 void DAC_Out(unsigned long data){
-  
+	// output to PE2 - PE5
 }
