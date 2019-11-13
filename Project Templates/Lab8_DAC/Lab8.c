@@ -33,14 +33,15 @@ int main(void){ // Real Lab13
 
 	// PortE used for piano keys, PortB used for DAC        
 	Sound_Init(); // initialize SysTick timer and DAC
-	Piano_Init();
+	Piano_Init(); // initialize piano key inputs
 	EnableInterrupts();  // enable after all initialization are done
 
-	while(1){                
+	while(1) {
 		// input from keys to select tone
 	}
 }
 
+// don't use?
 void delay(unsigned long msec){ 
 	unsigned long count;
 	while(msec > 0 ) {  // repeat while there are still delay
