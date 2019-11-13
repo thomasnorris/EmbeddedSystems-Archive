@@ -10,20 +10,20 @@
  * Section: 003
  * Date:    11/13/19
  *
- * Port B bits 3-0 have the 4-bit DAC
+ * Port B bits 5-2 have the 4-bit DAC
  *******************************************************************/
 
 #include "DAC.h"
 #include "..//inc//tm4c123gh6pm.h"
 
 // **************DAC_Init*********************
-// Initialize 4-bit DAC outputs (PB0 - PB3)
+// Initialize 4-bit DAC outputs (PB2 - PB5)
 // Input: none
 // Output: none
 void DAC_Init(void){
 	char PB = 0x02;
-	char PBX_DIR = 0x0F;
-	char PBX_DEN = 0x0F;
+	char PBX_DIR = 0x3C;
+	char PBX_DEN = 0x3C;
 	char ZERO = 0x00;
 	
 	SYSCTL_RCGC2_R |= PB;

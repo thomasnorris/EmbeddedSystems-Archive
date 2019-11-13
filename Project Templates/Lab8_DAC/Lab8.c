@@ -10,7 +10,7 @@
  * Section: 003
  * Date:    11/13/19
  *
- * Port B bits 3-0 have the 4-bit DAC
+ * Port B bits 5-2 have the 4-bit DAC
  * Port E bits 2-0 have 3 piano keys
  *******************************************************************/
 

@@ -170,7 +170,7 @@
             <Capability>1</Capability>
             <DriverSelection>4097</DriverSelection>
           </Flash1>
-          <bUseTDR>0</bUseTDR>
+          <bUseTDR>1</bUseTDR>
           <Flash2>BIN\lmidk-agdi.dll</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
@@ -429,6 +429,11 @@
               <FileName>Piano.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Piano.c</FilePath>
+            </File>
+            <File>
+              <FileName>SysTickInts.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\SysTickInts.c</FilePath>
             </File>
           </Files>
         </Group>
