@@ -39,7 +39,7 @@ void WaitForInterrupt(void);  // low power mode
 // **************SysTick_Init*********************
 // Initialize SysTick periodic interrupts
 // Input: interrupt period
-//        Units of period are 12.5ns (assuming 80 MHz clock)
+//        Units of period are 12.5ns (assuming 50 MHz clock)
 //        Maximum is 2^24-1
 //        Minimum is determined by length of ISR
 // Output: none
