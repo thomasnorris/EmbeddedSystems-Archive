@@ -13,8 +13,11 @@
  * This module calls the 4-bit DAC
  *******************************************************************/
 
+#include <stdint.h>
+
 #include "Sound.h"
 #include "DAC.h"
+#include "SysTickInts.h"
 #include "..//inc//tm4c123gh6pm.h"
 
 // **************Sound_Init*********************
@@ -23,7 +26,8 @@
 // Input: none
 // Output: none
 void Sound_Init(void){
-  
+	SysTick_Init(16000); // change me
+	DAC_Init();
 }
 
 // **************Sound_Tone*********************
@@ -51,5 +55,5 @@ void Sound_Off(void){
 // Interrupt service routine
 // Executed every 12.5ns*(period)
 void SysTick_Handler(void){
-   
+   char poop = 4;
 }
