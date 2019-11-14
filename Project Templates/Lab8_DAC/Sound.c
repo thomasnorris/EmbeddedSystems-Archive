@@ -20,8 +20,6 @@
 #include "SysTickInts.h"
 #include "..//inc//tm4c123gh6pm.h"
 
-void DisableInterrupts(void);
-
 const unsigned char wave[32] = {
 	8, 9, 11, 12, 13, 14, 14, 15, 
 	15, 15, 14, 14, 13, 12, 11, 9, 
@@ -59,7 +57,7 @@ void Sound_Tone(unsigned long period) {
 // This routine stops the sound output
 // Output: none
 void Sound_Off(void) {
-	DisableInterrupts();
+	
 }
 
 
