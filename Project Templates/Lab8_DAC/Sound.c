@@ -49,7 +49,7 @@ void Sound_Init(void) {
 //           Minimum is determined by length of ISR
 // Output: none
 void Sound_Tone(unsigned long toneHz) {
-	char period = toneHz * tableSize;
+	unsigned long period = toneHz * tableSize;
 	Sound_Off();
 	SysTick_Init(period);
 }
@@ -67,6 +67,6 @@ void Sound_Off(void) {
 // Interrupt service routine
 // Executed every 12.5ns*(period)
 void SysTick_Handler(void) {
-	currentIndex = (currentIndex + 1) & 0x0F;
+	currentIndex = (currentIndex + 1) & 0x1F;
 	DAC_Out(wave[currentIndex]);
 }
