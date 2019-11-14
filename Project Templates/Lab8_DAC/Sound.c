@@ -20,7 +20,9 @@
 #include "SysTickInts.h"
 #include "..//inc//tm4c123gh6pm.h"
 
-const unsigned char wave[32] = {
+const int tableSize = 32;
+
+const unsigned char wave[tableSize] = {
 	8, 9, 11, 12, 13, 14, 14, 15, 
 	15, 15, 14, 14, 13, 12, 11, 9, 
 	8, 7, 5, 4, 3, 2, 2, 1, 1, 1, 
@@ -34,7 +36,7 @@ unsigned char currentIndex = 0;
 // Input: none
 // Output: none
 void Sound_Init(void) {
-	// don't initialize SysTick here as it would produce a tone
+	Sound_Off();
 	DAC_Init();
 }
 
@@ -46,7 +48,8 @@ void Sound_Init(void) {
 //           Maximum is 2^24-1
 //           Minimum is determined by length of ISR
 // Output: none
-void Sound_Tone(unsigned long period) {
+void Sound_Tone(unsigned long toneHz) {
+	char period = toneHz * tableSize;
 	Sound_Off();
 	SysTick_Init(period);
 }
@@ -57,13 +60,13 @@ void Sound_Tone(unsigned long period) {
 // This routine stops the sound output
 // Output: none
 void Sound_Off(void) {
-	
+	SysTick_Init(0);
 }
 
 
 // Interrupt service routine
 // Executed every 12.5ns*(period)
 void SysTick_Handler(void) {
-	char poop = 0;
-	Sound_Off();
+	currentIndex = (currentIndex + 1) & 0x0F;
+	DAC_Out(wave[currentIndex]);
 }

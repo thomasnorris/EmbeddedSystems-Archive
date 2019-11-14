@@ -44,8 +44,12 @@ void WaitForInterrupt(void);  // low power mode
 //        Minimum is determined by length of ISR
 // Output: none
 void SysTick_Init(uint32_t period){
-	long sr;
-	sr = StartCritical();
+	long sr = StartCritical();
+	
+	// passing a 0 would set it to -1
+	if (period == 0)
+		period = 1;
+	
 	NVIC_ST_CTRL_R = 0;         // disable SysTick during setup
 	NVIC_ST_RELOAD_R = period-1;// reload value
 	NVIC_ST_CURRENT_R = 0;      // any write to current clears it

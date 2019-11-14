@@ -14,11 +14,6 @@
 
 #include "Piano.h"
 #include "..//inc//tm4c123gh6pm.h"
-
-// Notes C, E, G
-const int key0ToneHz = 262;
-const int key1ToneHz = 330; 
-const int key2ToneHz = 392;
 	
 // **************Piano_Init*********************
 // Initialize piano key inputs (PE0 - PE2)

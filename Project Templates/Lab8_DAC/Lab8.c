@@ -26,6 +26,11 @@ void delayMs(unsigned long msec);
 void Heartbeat_Init(void);
 void Heartbeat_Run(void);
 
+// Notes C, E, G
+const int tone1Hz = 262;
+const int tone2Hz = 330; 
+const int tone3Hz = 392;
+
 int main(void){
 	// for the real board grader to work 
 	// you must connect PD3 to your DAC output
@@ -40,7 +45,21 @@ int main(void){
 	
 	while(1) {
 		Heartbeat_Run();
-		// input from keys to select tone
+		
+		switch(Piano_In()) {
+			case 0x01:
+				Sound_Tone(tone1Hz);
+				break;
+			case 0x02:
+				Sound_Tone(tone2Hz);
+				break;
+			case 0x04:
+				Sound_Tone(tone3Hz);
+				break;
+			default:
+				Sound_Off();
+				break;
+		}
 	}
 }
 
