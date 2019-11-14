@@ -14,7 +14,7 @@
  *******************************************************************/
 
 #include "DAC.h"
-#include "..//inc//tm4c123gh6pm.h"
+#include "../inc/tm4c123gh6pm.h"
 
 // **************DAC_Init*********************
 // Initialize 4-bit DAC outputs (PB2 - PB5)
@@ -45,5 +45,8 @@ void DAC_Init(void){
 // Input: 4-bit data, 0 to 15 
 // Output: none
 void DAC_Out(unsigned long data){
-	// output to PE2 - PE5
+	// wave[] stores values from 0 - 15, PE0 to PE3
+	// need to shift to output to PE2 - PE5
+	data = data << 2;
+	GPIO_PORTB_DATA_R = data;	
 }
