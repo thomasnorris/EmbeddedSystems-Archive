@@ -67,6 +67,7 @@ void Sound_Off(void) {
 // Interrupt service routine
 // Executed every 12.5ns*(period)
 void SysTick_Handler(void) {
+	// get the next index, loop to index 0 after going through all of them
 	currentIndex = (currentIndex + 1) & 0x1F;
 	DAC_Out(wave[currentIndex]);
 }
