@@ -18,12 +18,13 @@
 
 // **************DAC_Init*********************
 // Initialize 4-bit DAC outputs (PB2 - PB5)
+// Initialize 1 bit debug output (PB0)
 // Input: none
 // Output: none
 void DAC_Init(void){
 	char PB = 0x02;
-	char PBX_DIR = 0x3C;
-	char PBX_DEN = 0x3C;
+	char PBX_DIR = 0x3D;
+	char PBX_DEN = 0x3D;
 	char ZERO = 0x00;
 	
 	SYSCTL_RCGC2_R |= PB;
@@ -49,4 +50,7 @@ void DAC_Out(unsigned long data){
 	// need to shift to output to PE2 - PE5
 	data = data << 2;
 	GPIO_PORTB_DATA_R = data;	
+	
+	// debug monitor, toggle PB0
+	GPIO_PORTB_DATA_R ^= 0x01;
 }
