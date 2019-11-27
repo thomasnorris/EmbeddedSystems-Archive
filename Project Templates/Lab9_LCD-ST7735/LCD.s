@@ -70,13 +70,33 @@ writecommand
 ;5) Read SSI0_SR_R and check bit 4, 
 ;6) If bit 4 is high, loop back to step 5 (wait for BUSY bit to be low)
 	
-	;Read SSI0_SR_R and check bit 4 
-	LDR r1, =SSI0_SR_R
-	LDR r0, [r1]
-	AND r0, r0, #0x10
+	; Read SSI0_SR_R and check bit 4 
+	LDR r2, =SSI0_SR_R
+	LDR r1, [r2]
+	AND r1, r1, #0x10
 	
-	CMP r0, #0x10
+	; If bit 4 is high, loop back to step 1 (wait for BUSY bit to be low)
+	CMP r1, #0x10
 	BEQ writecommand
+	
+	; Clear D/C=PA6 to zero
+	LDR r2, =DC
+	MOV r1, #0x00
+	STR r1, [r2]
+	
+	; Write the command to SSI0_DR_R
+	LDR r2, =SSI0_DR_R
+	MOV r0, [r2]
+
+readSSI0Again
+	; Read SSI0_SR_R and check bit 4
+	LDR r2, =SSI0_SR_R
+	LDR r1, [r2]
+	AND r1, r1, #0x10
+	
+	; If bit 4 is high, loop back to step 5 (wait for BUSY bit to be low)
+	CMP r1, #0x10
+	BEQ readSSI0Again
 	
 	BX  LR                          ;   return
 

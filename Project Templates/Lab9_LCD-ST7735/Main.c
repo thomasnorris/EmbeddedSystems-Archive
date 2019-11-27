@@ -50,7 +50,7 @@ int main(void){
 	bool breakEnabled = false;
 	
 	while(1) {
-		//writecommand(10001010);
+		writecommand(10001010);
 		//Input and display code goes here
 		//See assignment for psuedo code
 		
