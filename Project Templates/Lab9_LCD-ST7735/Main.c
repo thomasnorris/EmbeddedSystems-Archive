@@ -312,9 +312,23 @@ int main(void){
 	
 	while(1) {
 		clearScreen();
-		drawNames();
-		drawPicture();
-		drawCatchPhrases();
+		
+		// read inputs
+		in = GPIO_PORTE_DATA_R & 0x07;
+		switch(in) {
+			case 0x02:
+				drawNames();
+				drawCatchPhrases();
+				break;
+			case 0x04:
+				drawPicture();
+				break;
+			case 0x06:
+				drawNames();
+				drawCatchPhrases();
+				drawPicture();
+				break;
+		}
 		
 		// delay 2 seconds
 		for (int i = 0; i < 2000; ++i) {
