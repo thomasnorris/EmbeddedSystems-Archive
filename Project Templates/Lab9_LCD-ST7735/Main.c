@@ -31,7 +31,7 @@
 
 typedef enum { false, true } bool;
 
-extern void Delay1ms(uint32_t n);
+void Delay1ms(void);
 extern void IO_Init(void);
 extern void IO_HeartBeat(void);
 extern void IO_Touch(void);
@@ -47,8 +47,20 @@ int main(void){
 	bool breakEnabled = false;
 	
 	while(1) {
-		IO_HeartBeat();
 		//Input and display code goes here
 		//See assignment for psuedo code
+		
+		// delay 2 seconds
+		for (int i = 0; i < 2000; ++i) {
+			Delay1ms();
+		}
+		IO_HeartBeat();
+	}
+}
+
+void Delay1ms(void) {
+	unsigned long count = 16000;
+	while (count > 0) {
+		count--;
 	}
 }
