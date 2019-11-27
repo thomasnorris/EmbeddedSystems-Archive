@@ -69,34 +69,32 @@ writecommand
 ;4) Write the command to SSI0_DR_R
 ;5) Read SSI0_SR_R and check bit 4, 
 ;6) If bit 4 is high, loop back to step 5 (wait for BUSY bit to be low)
-	
-	; Read SSI0_SR_R and check bit 4 
+
+	; while ((SSI0_SR_R & SSI_SR_BSY) == SSI_SR_BSY)
 	LDR r2, =SSI0_SR_R
 	LDR r1, [r2]
-	AND r1, r1, #0x10
+	AND r1, r1, #SSI_SR_BSY
 	
-	; If bit 4 is high, loop back to step 1 (wait for BUSY bit to be low)
-	CMP r1, #0x01
+	CMP r1, #SSI_SR_BSY
 	BEQ writecommand
 	
-	; Clear D/C=PA6 to zero
-	LDR r2, =DC
-	MOV r1, #DC_COMMAND
-	STR r1, [r2]
+	; DC = DC_COMMAND
+	LDR r1, =DC
+	MOV r2, #DC_COMMAND
+	STR r2, [r1]
 	
-	; Write the command to SSI0_DR_R
-	LDR r2, =SSI0_DR_R
-	STR r0, [r2]
-
-readSSI0Again
-	; Read SSI0_SR_R and check bit 4
+	; SSI0_DR_R = c;
+	LDR r1, =SSI0_DR_R
+	STR r0, [r1]
+	
+waitNotBusy
+	; while ((SSI0_SR_R & SSI_SR_BSY) == SSI_SR_BSY)
 	LDR r2, =SSI0_SR_R
 	LDR r1, [r2]
-	AND r1, r1, #0x10
+	AND r1, r1, #SSI_SR_BSY
 	
-	; If bit 4 is high, loop back to step 5 (wait for BUSY bit to be low)
-	CMP r1, #0x01
-	BEQ readSSI0Again
+	CMP r1, #SSI_SR_BSY
+	BEQ waitNotBusy
 	
 	BX  LR                          ;   return
 
@@ -110,23 +108,22 @@ writedata
 ;3) Set D/C=PA6 to one
 ;4) Write the 8-bit data to SSI0_DR_R
 	
-	; Read SSI0_SR_R and check bit 1 
+	; while ((SSI0_SR_R & SSI_SR_TNF) == 0)
 	LDR r2, =SSI0_SR_R
 	LDR r1, [r2]
-	AND r1, r1, #0x02
+	AND r1, r1, #SSI_SR_TNF
 	
-	; If bit 1 is low loop back to step 1 (wait for TNF bit to be high)
 	CMP r1, #0x00
 	BEQ writedata
 	
-	; Clear D/C=PA6 to one
-	LDR r2, =DC
-	MOV r1, #DC_DATA
-	STR r1, [r2]
+	; DC = DC_DATA
+	LDR r1, =DC
+	MOV r2, #DC_DATA
+	STR r2, [r1]
 	
-	; Write the 8-bit data to SSI0_DR_R
-	LDR r2, =SSI0_DR_R
-	STR r0, [r2]
+	; SSI0_DR_R = c;
+	LDR r1, =SSI0_DR_R
+	STR r0, [r1]
 	
     BX  LR                          ;   return
 
