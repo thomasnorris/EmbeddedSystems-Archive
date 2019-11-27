@@ -36,10 +36,12 @@ extern void IO_Init(void);
 extern void IO_HeartBeat(void);
 extern void IO_Touch(void);
 
+void delay2S(void);
 void clearScreen(void);
 void drawNames(void);
 void drawPicture(void);
 void drawCatchPhrases(void);
+void breakPointMode(void);
 
 const unsigned short UT[] = {
  0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xEF3C,
@@ -308,33 +310,56 @@ int main(void){
 	ST7735_InitR(INITR_REDTAB);
 	
 	unsigned long in = 0x00000000;
-	bool breakEnabled = false;
+	bool breakEnabled;
 	
 	while(1) {
+		breakEnabled = false;
 		clearScreen();
 		
 		// read inputs
 		in = GPIO_PORTE_DATA_R & 0x07;
+		if (in & 0x01)
+			breakEnabled = true;
+		
 		switch(in) {
 			case 0x02:
+			case 0x03:
+				if (breakEnabled)
+					IO_Touch();
 				drawNames();
+				if (breakEnabled)
+					IO_Touch();
 				drawCatchPhrases();
 				break;
 			case 0x04:
+			case 0x05:
+				if (breakEnabled)
+					IO_Touch();
 				drawPicture();
 				break;
 			case 0x06:
+			case 0x07:
+				if (breakEnabled)
+					IO_Touch();
 				drawNames();
+				if (breakEnabled)
+					IO_Touch();
 				drawCatchPhrases();
+				if (breakEnabled)
+					IO_Touch();
 				drawPicture();
 				break;
 		}
 		
 		// delay 2 seconds
-		for (int i = 0; i < 2000; ++i) {
-			Delay1ms(5);
-		}
+		delay2S();
 		IO_HeartBeat();
+	}
+}
+
+void delay2S() {
+	for (int i = 0; i < 2000; ++i) {
+		Delay1ms(5);
 	}
 }
 

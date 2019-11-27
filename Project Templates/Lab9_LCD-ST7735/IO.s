@@ -115,9 +115,31 @@ IO_HeartBeat
 ; This is a public function
 ; Invariables: This function must not permanently modify registers R4 to R11
 IO_Touch
+	; turn PE3 on
+	LDR r1, =GPIO_PORTE_DATA_R
+	MOV r0, #0x08
+	STR r0, [r1]
+	
+	; read in PE0
+	LDR r1, =GPIO_PORTE_DATA_R
+	LDR r0, [r1]
+	AND r0, r0, #0x01
+	
+	; wait for switch to not be pressed
+	CMP r0, #0x01
+	BEQ IO_Touch
 
+waitPressed
+	; read in PE0
+	LDR r1, =GPIO_PORTE_DATA_R
+	LDR r0, [r1]
+	AND r0, r0, #0x01
+	
+	CMP r0, #0x00
+	BEQ waitPressed
+	
     BX  LR                          ; return*/
 ;* * * * * * * * End of IO_Touch * * * * * * * *
 
     ALIGN                           ; make sure the end of this section is aligned
-    END                             ; end of file
+    END                             ; end of file	
