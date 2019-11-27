@@ -36,21 +36,21 @@ extern void IO_Init(void);
 extern void IO_HeartBeat(void);
 extern void IO_Touch(void);
 
-extern void writecommand(uint8_t command);
-extern void writedata(uint8_t data);
-
 int main(void){
+	char str[] = "Hello world!";
 	PLL_Init(); // set system clock to 80 MHz
 	IO_Init();
   
 	// test DrawChar() and DrawCharS()
 	ST7735_InitR(INITR_REDTAB);
+	ST7735_DrawCharS(10, 10, 0x24, 0x0000, 0xFFFF, 2);
+	//ST7735_FillRect(10, 10, 10, 10, 0xFFFF);
+	//ST7735_DrawBitmap(0, 0, Logo, 40, 160);
 	
 	unsigned long in = 0x00000000;
 	bool breakEnabled = false;
 	
 	while(1) {
-		writecommand(10001010);
 		//Input and display code goes here
 		//See assignment for psuedo code
 		

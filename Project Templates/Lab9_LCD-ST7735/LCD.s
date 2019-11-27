@@ -76,17 +76,17 @@ writecommand
 	AND r1, r1, #0x10
 	
 	; If bit 4 is high, loop back to step 1 (wait for BUSY bit to be low)
-	CMP r1, #0x10
+	CMP r1, #0x01
 	BEQ writecommand
 	
 	; Clear D/C=PA6 to zero
 	LDR r2, =DC
-	MOV r1, #0x00
+	MOV r1, #DC_COMMAND
 	STR r1, [r2]
 	
 	; Write the command to SSI0_DR_R
 	LDR r2, =SSI0_DR_R
-	MOV r0, [r2]
+	STR r0, [r2]
 
 readSSI0Again
 	; Read SSI0_SR_R and check bit 4
@@ -95,7 +95,7 @@ readSSI0Again
 	AND r1, r1, #0x10
 	
 	; If bit 4 is high, loop back to step 5 (wait for BUSY bit to be low)
-	CMP r1, #0x10
+	CMP r1, #0x01
 	BEQ readSSI0Again
 	
 	BX  LR                          ;   return
@@ -121,7 +121,7 @@ writedata
 	
 	; Clear D/C=PA6 to one
 	LDR r2, =DC
-	MOV r1, #0x01
+	MOV r1, #DC_DATA
 	STR r1, [r2]
 	
 	; Write the 8-bit data to SSI0_DR_R
