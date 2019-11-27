@@ -4,10 +4,10 @@
  * Adapted by Thomas Royko, Gursel Serpen
  * Runs on TM4C123
  * 
- * Instructor: ***fill this in***
- * Student: ***fill this in***
- * Section: ***fill this in***
- * Date:    ***fill this in***
+ * Instructor: Gursel Serpen
+ * Student: Thomas Norris, Juliette Ulman
+ * Section: 003
+ * Date: 11/27/19
  *
  * 16-bit color, 128 wide by 160 high LCD
  *   Backlight (pin 10) connected to +3.3 V
@@ -31,23 +31,23 @@
 
 typedef enum { false, true } bool;
 
-void Delay1ms(uint32_t n);
-void IO_Init(void);
-void IO_HeartBeat(void);
-void IO_Touch(void);
+extern void Delay1ms(uint32_t n);
+extern void IO_Init(void);
+extern void IO_HeartBeat(void);
+extern void IO_Touch(void);
 
 int main(void){
-  PLL_Init(); // set system clock to 80 MHz
-  IO_Init();
+	PLL_Init(); // set system clock to 80 MHz
+	IO_Init();
   
-  // test DrawChar() and DrawCharS()
-  ST7735_InitR(INITR_REDTAB);
+	// test DrawChar() and DrawCharS()
+	ST7735_InitR(INITR_REDTAB);
 	
 	unsigned long in = 0x00000000;
 	bool breakEnabled = false;
 	
-  while(1){
+	while(1) {
 		//Input and display code goes here
 		//See assignment for psuedo code
-  }
+	}
 }

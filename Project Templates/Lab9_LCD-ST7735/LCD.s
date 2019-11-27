@@ -1,9 +1,9 @@
 ;*******************************************************************
 ; LCD.s
-; Instructor: ***fill this in***
-; Student: ***fill this in***
-; Section: ***fill this in***
-; Date:    ***fill this in***
+; Instructor: Gursel Serpen
+; Student: Thomas Norris, Juliette Ulman
+; Section: 003
+; Date: 11/27/19
 ;
 ; Runs on LM4F120/TM4C123
 ; Use SSI0 to send an 8-bit code to the ST7735 160x128 pixel LCD.
