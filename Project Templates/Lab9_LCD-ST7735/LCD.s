@@ -110,6 +110,24 @@ writedata
 ;3) Set D/C=PA6 to one
 ;4) Write the 8-bit data to SSI0_DR_R
 	
+	; Read SSI0_SR_R and check bit 1 
+	LDR r2, =SSI0_SR_R
+	LDR r1, [r2]
+	AND r1, r1, #0x02
+	
+	; If bit 1 is low loop back to step 1 (wait for TNF bit to be high)
+	CMP r1, #0x00
+	BEQ writedata
+	
+	; Clear D/C=PA6 to one
+	LDR r2, =DC
+	MOV r1, #0x01
+	STR r1, [r2]
+	
+	; Write the 8-bit data to SSI0_DR_R
+	LDR r2, =SSI0_DR_R
+	STR r0, [r2]
+	
     BX  LR                          ;   return
 
 
