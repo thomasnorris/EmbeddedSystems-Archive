@@ -48,7 +48,7 @@ SYSCTL_RCGCGPIO_R  EQU 0x400FE608
 ; Invariables: This function must not permanently modify registers R4 to R11
 IO_Init
 	; port E initialization
-	; enable the clock for port F
+	; enable the clock for port E
 	LDR r1, =SYSCTL_RCGCGPIO_R
 	LDR r0, [r1]
 	ORR r0, r0, #0x10
@@ -93,7 +93,15 @@ IO_Init
 ; This is a public function
 ; Invariables: This function must not permanently modify registers R4 to R11
 IO_HeartBeat
-
+	; read PE3
+	LDR r1, =GPIO_PORTE_DATA_R
+	LDR r0, [r1]
+	
+	; toggle 
+	AND r0, r0, #0x08
+	EOR r0, r0, #0x08
+	STR r0, [r1]
+	
     BX  LR                        ; return
 ;* * * * * * * * End of IO_HeartBeat * * * * * * * *
 

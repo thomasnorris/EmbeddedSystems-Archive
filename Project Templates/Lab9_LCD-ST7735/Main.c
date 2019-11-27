@@ -47,6 +47,7 @@ int main(void){
 	bool breakEnabled = false;
 	
 	while(1) {
+		IO_HeartBeat();
 		//Input and display code goes here
 		//See assignment for psuedo code
 	}
