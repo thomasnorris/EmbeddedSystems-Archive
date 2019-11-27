@@ -97,7 +97,7 @@ IO_HeartBeat
 	LDR r1, =GPIO_PORTE_DATA_R
 	LDR r0, [r1]
 	
-	; toggle 
+	; toggle PE3
 	AND r0, r0, #0x08
 	EOR r0, r0, #0x08
 	STR r0, [r1]

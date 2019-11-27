@@ -31,10 +31,13 @@
 
 typedef enum { false, true } bool;
 
-void Delay1ms(void);
+void Delay1ms(uint32_t n);
 extern void IO_Init(void);
 extern void IO_HeartBeat(void);
 extern void IO_Touch(void);
+
+extern void writecommand(uint8_t command);
+extern void writedata(uint8_t data);
 
 int main(void){
 	PLL_Init(); // set system clock to 80 MHz
@@ -47,20 +50,15 @@ int main(void){
 	bool breakEnabled = false;
 	
 	while(1) {
+		//writecommand(10001010);
 		//Input and display code goes here
 		//See assignment for psuedo code
 		
 		// delay 2 seconds
 		for (int i = 0; i < 2000; ++i) {
-			Delay1ms();
+			Delay1ms(5);
 		}
 		IO_HeartBeat();
 	}
 }
 
-void Delay1ms(void) {
-	unsigned long count = 16000;
-	while (count > 0) {
-		count--;
-	}
-}

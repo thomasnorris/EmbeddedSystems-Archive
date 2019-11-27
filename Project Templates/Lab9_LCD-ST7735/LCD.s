@@ -69,7 +69,15 @@ writecommand
 ;4) Write the command to SSI0_DR_R
 ;5) Read SSI0_SR_R and check bit 4, 
 ;6) If bit 4 is high, loop back to step 5 (wait for BUSY bit to be low)
-
+	
+	;Read SSI0_SR_R and check bit 4 
+	LDR r1, =SSI0_SR_R
+	LDR r0, [r1]
+	AND r0, r0, #0x10
+	
+	CMP r0, #0x10
+	BEQ writecommand
+	
 	BX  LR                          ;   return
 
 ; This is a helper function that sends an 8-bit data to the LCD.
